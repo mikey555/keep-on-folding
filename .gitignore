@@ -75,6 +75,6 @@ crashlytics-build.properties
 .DS_Store
 mono_crash*
 .vscode/
-.vsconfig/
+.vsconfig
 /[Aa]ssets/[Aa]utosave/*
 /[Aa]ssets/[Aa]utosave
