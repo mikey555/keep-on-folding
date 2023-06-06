@@ -76,4 +76,5 @@ crashlytics-build.properties
 mono_crash*
 .vscode/
 .vsconfig/
-
+/[Aa]ssets/[Aa]utosave/*
+/[Aa]ssets/[Aa]utosave
