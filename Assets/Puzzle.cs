@@ -150,4 +150,12 @@ public class Puzzle : MonoBehaviour
         
 
     }
+
+    public void OnArriveComplete() {
+        GameManager.Instance.IsTransitioningToNextPuzzle = false;
+    }
+
+    public void OnDepart() {
+        GameManager.Instance.IsTransitioningToNextPuzzle = true;
+    }
 }

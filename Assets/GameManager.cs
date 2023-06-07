@@ -21,6 +21,13 @@ public class GameManager : MonoBehaviour
 
 
     public GameObject PuzzlePrefab;
+    bool isTransitioningToNextPuzzle;
+    public bool IsTransitioningToNextPuzzle {
+        get { return isTransitioningToNextPuzzle; }
+        set { 
+            isTransitioningToNextPuzzle = value; 
+        }
+    }
 
     WordList wordList;
     List<string[]> words;
@@ -50,6 +57,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         words = wordList.Words;
+        isTransitioningToNextPuzzle = true;
         
         NextPuzzle();
     }
@@ -57,6 +65,7 @@ public class GameManager : MonoBehaviour
    // Update is called once per frame
     void Update()
     {
+        if (IsTransitioningToNextPuzzle) return;
 
         if (Input.GetKeyDown(KeyCode.A))
         {
