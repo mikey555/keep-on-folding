@@ -103,7 +103,7 @@ public class FoldingUI : MonoBehaviour
         var numText = GameObject.Instantiate<Text>(numberChange, timeLeftText.transform);
         var signString = "";
         Color startColor;
-        if (val > 0) {
+        if (!isPenalty) {
             signString = "+";
             startColor = Color.green;
         }
