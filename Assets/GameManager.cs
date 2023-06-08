@@ -15,26 +15,31 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get => _instance; set => _instance = value; }
 
     [SerializeField] ScoreManager scoreManager;
-    [SerializeField] Transform spawnPoint;
+    [SerializeField] Transform _puzzleSpawnTransform;
+    [SerializeField] Transform _puzzleParent;
 
 
 
 
-    public GameObject PuzzlePrefab;
+
+    [SerializeField] GameObject _puzzlePrefab;
     bool isTransitioningToNextPuzzle;
-    public bool IsTransitioningToNextPuzzle {
+    public bool IsTransitioningToNextPuzzle
+    {
         get { return isTransitioningToNextPuzzle; }
-        set { 
-            isTransitioningToNextPuzzle = value; 
+        set
+        {
+            isTransitioningToNextPuzzle = value;
         }
     }
 
     WordList wordList;
     List<string[]> words;
-    
+
 
     Puzzle _currentPuzzle;
-    public Puzzle CurrentPuzzle {
+    public Puzzle CurrentPuzzle
+    {
         get { return _currentPuzzle; }
     }
 
@@ -50,19 +55,19 @@ public class GameManager : MonoBehaviour
         _instance = this;
 
         wordList = GetComponent<WordList>();
-
+        wordList.Init();
+        words = wordList.Words;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        words = wordList.Words;
+
         isTransitioningToNextPuzzle = true;
-        
         NextPuzzle();
     }
 
-   // Update is called once per frame
+    // Update is called once per frame
     void Update()
     {
         if (IsTransitioningToNextPuzzle) return;
@@ -70,20 +75,25 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             _currentPuzzle.CheckForLetter("A");
-            
-        } else if (Input.GetKeyDown(KeyCode.B))
+
+        }
+        else if (Input.GetKeyDown(KeyCode.B))
         {
             _currentPuzzle.CheckForLetter("B");
-        } else if (Input.GetKeyDown(KeyCode.C))
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
         {
             _currentPuzzle.CheckForLetter("C");
-        } else if (Input.GetKeyDown(KeyCode.D))
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
         {
             _currentPuzzle.CheckForLetter("D");
-        } else if (Input.GetKeyDown(KeyCode.E))
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
         {
             _currentPuzzle.CheckForLetter("E");
-        } else if (Input.GetKeyDown(KeyCode.F))
+        }
+        else if (Input.GetKeyDown(KeyCode.F))
         {
             _currentPuzzle.CheckForLetter("F");
         }
@@ -184,29 +194,32 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Return) && _currentPuzzle.LetterCount == 6)
         {
-            
+
             if (GameManager.IsWordValid(_currentPuzzle.TypedLetters, _currentPuzzle.WordPossibilities))
             {
                 _currentPuzzle.Pass();
+
                 FoldingUI.Instance.RevealAnswer(_currentPuzzle.TypedLetters, Color.HSVToRGB(0.33f, 0.8f, 0.8f));
                 scoreManager.PlayerPasses();
+                AudioSystem.Instance.PlayBellSound();
             }
-            
+
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
             _currentPuzzle.Skip();
             FoldingUI.Instance.RevealAnswer(_currentPuzzle.WordPossibilities[0], Color.HSVToRGB(1f, 1f, 0.8f));
             scoreManager.PlayerSkips();
-            
+            AudioSystem.Instance.PlayBuzzerSound();
         }
 
-        
+
     }
 
     public string[] GetWordArray()
     {
-        if (words.Count == 0) {
+        if (words.Count == 0)
+        {
             // TODO: you win, no more words
         }
         var index = Random.Range(0, words.Count);
@@ -216,66 +229,75 @@ public class GameManager : MonoBehaviour
         return wordArray;
     }
 
- 
 
-    public void ShowAnagrams(List<string> words) {
+
+    public void ShowAnagrams(List<string> words)
+    {
         var c1 = new HashSet<char>();
-            c1.Add('A');
-            c1.Add('B');
-            c1.Add('C');
-            var c2 = new HashSet<char>();
-            c2.Add('A');
-            c2.Add('B');
-            c2.Add('D');
-            Debug.Log("c1 == c2: " + c1.SetEquals(c2));
+        c1.Add('A');
+        c1.Add('B');
+        c1.Add('C');
+        var c2 = new HashSet<char>();
+        c2.Add('A');
+        c2.Add('B');
+        c2.Add('D');
+        Debug.Log("c1 == c2: " + c1.SetEquals(c2));
 
         var charArrayList = new List<(string, char[])>();
-        foreach (var word in words) {
+        foreach (var word in words)
+        {
             Debug.Log("Word: " + word);
             char[] charArray = word.ToCharArray();
             Debug.Log(charArray.ToString());
             System.Array.Sort(charArray, Comparer<char>.Default);
             Debug.Log(charArray.ToString());
-            
-            foreach (var charArrayFromList in charArrayList) {
-                if (charArray == charArrayFromList.Item2){
+
+            foreach (var charArrayFromList in charArrayList)
+            {
+                if (charArray == charArrayFromList.Item2)
+                {
                     Debug.Log(word + "/" + charArrayFromList.Item1);
                 }
             }
             charArrayList.Add((word, charArray));
 
         }
-        
-        
+
+
     }
 
     public void NextPuzzle()
     {
-        
+
         if (ScoreManager.IsGameOver) return;
-        var next = Instantiate(PuzzlePrefab);
+        var next = Instantiate(_puzzlePrefab, _puzzleSpawnTransform.position, Quaternion.identity, _puzzleParent);
         next.gameObject.SetActive(true);
         _currentPuzzle = next.GetComponent<Puzzle>();
 
     }
 
-    
 
-    public static bool IsWordValid(string wordEntered,  string[] words) {
-        foreach (var word in words) {
-            if (word.ToUpper() == wordEntered.ToUpper()) {
+
+    public static bool IsWordValid(string wordEntered, string[] words)
+    {
+        foreach (var word in words)
+        {
+            if (word.ToUpper() == wordEntered.ToUpper())
+            {
                 return true;
             }
         }
         return false;
     }
 
-    public void OnPlayAgain() {
+    public void OnPlayAgain()
+    {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public bool UseHint() {
+    public bool UseHint()
+    {
         return CurrentPuzzle.ActivateHint();
     }
-    
+
 }

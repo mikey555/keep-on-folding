@@ -14,13 +14,14 @@ public class FoldingUI : MonoBehaviour
     [SerializeField] TMP_Text answerText;
     [SerializeField] Color defaultAnswerTextColor = Color.black;
     [SerializeField] TMP_Text timeLeftText;
-    [SerializeField] RectTransform gameOverPanel;
+    [SerializeField] Canvas gameOverCanvas;
     [SerializeField] TMP_Text streakLengthText;
     [SerializeField] Button hintButton;
     [SerializeField] Text numberChange;
-    
 
-    void Awake() {
+
+    void Awake()
+    {
         if (_instance != null)
         {
             Destroy(gameObject);
@@ -29,85 +30,99 @@ public class FoldingUI : MonoBehaviour
         _instance = this;
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         ScoreManager.OnGameOver += OnGameOver;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         ScoreManager.OnGameOver -= OnGameOver;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void RevealAnswer(string word, Color color) {
+    public void RevealAnswer(string word, Color color)
+    {
         StartCoroutine(RevealAnswerCoroutine(word, color));
     }
-    IEnumerator RevealAnswerCoroutine(string word, Color color) {
-        
+    IEnumerator RevealAnswerCoroutine(string word, Color color)
+    {
+
         answerText.text = word;
         answerText.color = color;
         var transparentColor = new Color(color.r, color.g, color.b, 0);
-        
+
         Sequence seq = DOTween.Sequence();
         seq.Append(answerText.transform.DOMove(answerText.transform.position + Vector3.up, 1f))
-            .Append(DOTween.To(()=> answerText.color, x=> answerText.color = x, transparentColor, 1).SetOptions(true));
+            .Append(DOTween.To(() => answerText.color, x => answerText.color = x, transparentColor, 1).SetOptions(true));
         yield return seq.WaitForCompletion();
         answerText.text = "";
-        answerText.color = defaultAnswerTextColor;        
+        answerText.color = defaultAnswerTextColor;
     }
 
-    public void HideAnswer() {
+    public void HideAnswer()
+    {
         answerText.text = "";
     }
 
-    public void SetTypedLettersText(string str) {
+    public void SetTypedLettersText(string str)
+    {
         answerText.text = str;
     }
 
-    public void OnGameOver() {
-        gameOverPanel.gameObject.SetActive(true);
+    public void OnGameOver()
+    {
+        gameOverCanvas.gameObject.SetActive(true);
         timeLeftText.enabled = false;
     }
 
-    public void SetTimeLeft(float timeLeft) {
+    public void SetTimeLeft(float timeLeft)
+    {
         timeLeftText.text = Mathf.Ceil(timeLeft).ToString();
     }
 
 
-    public void DisableHintButton() {
+    public void DisableHintButton()
+    {
         if (!hintButton.IsInteractable()) return;
         hintButton.interactable = false;
     }
 
-    public void EnableHintButton() {
+    public void EnableHintButton()
+    {
         if (hintButton.IsInteractable()) return;
         hintButton.interactable = true;
     }
 
-    public void UpdateHintButtonText(int hintsRemaining) {
-        hintButton.GetComponentInChildren<TMP_Text>().text = 
+    public void UpdateHintButtonText(int hintsRemaining)
+    {
+        hintButton.GetComponentInChildren<TMP_Text>().text =
             string.Format("Use Hint\n<b>{0}</b> Remaining", hintsRemaining);
     }
 
-    public void ShowNumberChange(float val, bool isPenalty = false) {
+    public void ShowNumberChange(float val, bool isPenalty = false)
+    {
         var numText = GameObject.Instantiate<Text>(numberChange, timeLeftText.transform);
         var signString = "";
         Color startColor;
-        if (!isPenalty) {
+        if (!isPenalty)
+        {
             signString = "+";
             startColor = Color.green;
         }
-        else {
+        else
+        {
             signString = "-";
             startColor = Color.red;
         }
@@ -116,11 +131,12 @@ public class FoldingUI : MonoBehaviour
         numText.text = signString + val.ToString();
         numText.gameObject.SetActive(true);
         numText.transform.DOMoveY(numText.transform.position.y + 20, 2f);
-        numText.DOColor(endColor, 2f).OnComplete(() => {
+        numText.DOColor(endColor, 2f).OnComplete(() =>
+        {
             GameObject.Destroy(numText);
         });
-        
+
     }
-    
-    
+
+
 }

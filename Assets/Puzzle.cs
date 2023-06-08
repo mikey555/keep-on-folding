@@ -61,6 +61,7 @@ public class Puzzle : MonoBehaviour
 
     public void NextPuzzle()
     {
+        GameObject.Destroy(unfoldedDie);
         GameManager.Instance.NextPuzzle();
     }
 
@@ -151,11 +152,5 @@ public class Puzzle : MonoBehaviour
 
     }
 
-    public void OnArriveComplete() {
-        GameManager.Instance.IsTransitioningToNextPuzzle = false;
-    }
-
-    public void OnDepart() {
-        GameManager.Instance.IsTransitioningToNextPuzzle = true;
-    }
+    
 }

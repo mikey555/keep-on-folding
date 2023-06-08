@@ -44,22 +44,37 @@ public class Side : MonoBehaviour
     public void Repaint() {
         float h, s, v;
         Color baseColor;
+
+        /*
+        if not typed and no hint
+            clear
+        else 
+        */
+        
+        if (!isTyped && !isHintActivated) {
+            image.color = Color.clear;
+            return;
+        }
+
+
         if (isHintActivated) {
-            baseColor = Color.green;
+            baseColor = new Color(0,1,0,0.25f);
         }
         else {
-            baseColor = Color.clear;
+            baseColor = new Color(0,0,0,0.25f);
         }
         
+        // darken by 20%
         if (isTyped) {
-        
             Color.RGBToHSV(baseColor, out h, out s, out v);
-            // v -= 0.2f;
-            image.color = Color.HSVToRGB(h, s, 0.5f);
-
+            var newColor = Color.HSVToRGB(h, s, v - 0.2f);
+            newColor = new Color(newColor.r, newColor.g, newColor.b, baseColor.a);
+            image.color = newColor;
         } else {
             image.color = baseColor;
         }
+        
+        
 
         
     }
@@ -73,6 +88,7 @@ public class Side : MonoBehaviour
     public void MarkAsUntyped()
     {
         isTyped = false;
+        
         Repaint();
     }
 
@@ -80,5 +96,8 @@ public class Side : MonoBehaviour
     {
         isHintActivated = true;
         Repaint();
+        Debug.Log("hint activated on Side: " + this);
     }
+
+    
 }

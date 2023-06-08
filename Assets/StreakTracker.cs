@@ -7,26 +7,37 @@ using TMPro;
 public class StreakTracker : MonoBehaviour
 {
     // Start is called before the first frame update
-    
-    
+
+
     TMP_Text text;
 
     StreakAnimation streakAnim;
-    
+
 
     [SerializeField] int streakLength;
-    public int StreakLength {
-        get { return streakLength;}
-        set { 
-            
+    [SerializeField] int onFireAt;
+    public int StreakLength
+    {
+        get { return streakLength; }
+        set
+        {
             streakLength = value;
-            streakAnim.UpdateStreak(streakLength);
+            if (value >= onFireAt)
+            {
+                streakAnim.EnableFire();
+                AudioSystem.Instance.PlayFlameSound();
+            }
+            else if (value == 0)
+            {
+                streakAnim.DisableFire();
+            }
             text.text = StreakLength.ToString();
         }
     }
 
-    void Awake() {
-        
+    void Awake()
+    {
+
         text = GetComponentInChildren<TMP_Text>();
         streakAnim = GetComponent<StreakAnimation>();
     }
@@ -39,20 +50,22 @@ public class StreakTracker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-     public void IncreaseStreak() {
+    public void IncreaseStreak()
+    {
         StreakLength++;
     }
 
-    public void RestartStreak() {
+    public void RestartStreak()
+    {
         StreakLength = 0;
     }
 
-    
 
-    
 
-    
+
+
+
 }

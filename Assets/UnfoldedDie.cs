@@ -46,8 +46,17 @@ public class UnfoldedDie : MonoBehaviour
     public void ActivateHint(string s) {
         Sides.Find(x => x.Letter.ToUpper() == s.ToUpper()).MarkAsHint();
     }
-    
 
+  
+    
+    public void OnArriveComplete() {
+        GameManager.Instance.IsTransitioningToNextPuzzle = false;
+    }
+
+    public void OnDepart() {
+        GameManager.Instance.IsTransitioningToNextPuzzle = true;
+        
+    }
     
 
 
