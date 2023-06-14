@@ -7,10 +7,9 @@ using UnityEngine.UI;
 
 
 
-public class AudioSystem : MonoBehaviour
+public class AudioSystem : Singleton<AudioSystem>
 {
-    private static AudioSystem _instance;
-    public static AudioSystem Instance { get => _instance; set => _instance = value; }
+
 
     [SerializeField] AudioSource _musicSource;
     [SerializeField] AudioSource _sfxSource;
@@ -22,16 +21,18 @@ public class AudioSystem : MonoBehaviour
     [SerializeField] AudioClip bellClip;
 
 
-    private void Awake()
-    {
-        if (_instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        _instance = this;
-    }
+
     // Update is called once per frame
+
+    private void OnEnable()
+    {
+
+    }
+
+    private void OnDisable()
+    {
+
+    }
 
     public void PlaySound(AudioClip clip, float volumeScale)
     {

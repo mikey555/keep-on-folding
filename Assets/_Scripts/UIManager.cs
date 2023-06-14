@@ -7,37 +7,35 @@ using UnityEngine.UI;
 
 
 
-public class FoldingUI : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
-    private static FoldingUI _instance;
-    public static FoldingUI Instance { get => _instance; set => _instance = value; }
     [SerializeField] TMP_Text answerText;
     [SerializeField] Color defaultAnswerTextColor = Color.black;
     [SerializeField] TMP_Text timeLeftText;
-    [SerializeField] Canvas gameOverCanvas;
+
     [SerializeField] TMP_Text streakLengthText;
     [SerializeField] Button hintButton;
     [SerializeField] Text numberChange;
 
+    [SerializeField] Canvas startScreenCanvas;
+    [SerializeField] Canvas gameCanvas;
+    [SerializeField] Canvas gameOverCanvas;
+    [SerializeField] Canvas bottomPanelCanvas;
 
-    void Awake()
-    {
-        if (_instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        _instance = this;
-    }
+    [SerializeField] Color _correctAnswerColor = Color.HSVToRGB(0.33f, 0.8f, 0.8f);
+    [SerializeField] Color _skipAnswerColor = Color.HSVToRGB(1f, 1f, 0.8f);
+
 
     private void OnEnable()
     {
-        ScoreManager.OnGameOver += OnGameOver;
+        GameManager.OnGameOver += OnGameOver;
+
     }
 
     private void OnDisable()
     {
-        ScoreManager.OnGameOver -= OnGameOver;
+        GameManager.OnGameOver -= OnGameOver;
+
     }
 
     // Start is called before the first frame update
@@ -52,24 +50,24 @@ public class FoldingUI : MonoBehaviour
 
     }
 
-    public void RevealAnswer(string word, Color color)
-    {
-        StartCoroutine(RevealAnswerCoroutine(word, color));
-    }
-    IEnumerator RevealAnswerCoroutine(string word, Color color)
+    public void RevealAnswer(string word, bool isCorrect)
     {
 
         answerText.text = word;
-        answerText.color = color;
-        var transparentColor = new Color(color.r, color.g, color.b, 0);
+        answerText.color = _skipAnswerColor;
+        if (isCorrect) answerText.color = _correctAnswerColor;
+        var transparentColor = new Color(answerText.color.r, answerText.color.g, answerText.color.b, 0);
 
         Sequence seq = DOTween.Sequence();
         seq.Append(answerText.transform.DOMove(answerText.transform.position + Vector3.up, 1f))
-            .Append(DOTween.To(() => answerText.color, x => answerText.color = x, transparentColor, 1).SetOptions(true));
-        yield return seq.WaitForCompletion();
-        answerText.text = "";
-        answerText.color = defaultAnswerTextColor;
+            .Append(DOTween.To(() => answerText.color, x => answerText.color = x, transparentColor, 1).SetOptions(true))
+            .OnComplete(() =>
+             {
+                 answerText.text = "";
+                 answerText.color = defaultAnswerTextColor;
+             });
     }
+
 
     public void HideAnswer()
     {
@@ -81,10 +79,23 @@ public class FoldingUI : MonoBehaviour
         answerText.text = str;
     }
 
+    public void OnGameStart()
+    {
+        startScreenCanvas.gameObject.SetActive(true);
+        bottomPanelCanvas.gameObject.SetActive(false);
+    }
+
+    public void OnGameplayStart()
+    {
+        startScreenCanvas.gameObject.SetActive(false);
+        bottomPanelCanvas.gameObject.SetActive(true);
+    }
+
     public void OnGameOver()
     {
         gameOverCanvas.gameObject.SetActive(true);
-        timeLeftText.enabled = false;
+        bottomPanelCanvas.gameObject.SetActive(false);
+        
     }
 
     public void SetTimeLeft(float timeLeft)
@@ -130,13 +141,20 @@ public class FoldingUI : MonoBehaviour
         numText.color = startColor;
         numText.text = signString + val.ToString();
         numText.gameObject.SetActive(true);
-        numText.transform.DOMoveY(numText.transform.position.y + 20, 2f);
-        numText.DOColor(endColor, 2f).OnComplete(() =>
-        {
-            GameObject.Destroy(numText);
-        });
+        Sequence fadeOut = DOTween.Sequence();
+        fadeOut
+            .Append(numText.transform.DOMoveY(numText.transform.position.y + 20, 1f))
+            .Join(numText.DOColor(endColor, 2f))
+            .OnComplete(() =>
+            {
+                GameObject.Destroy(numText);
+            });
+
+
 
     }
+
+
 
 
 }

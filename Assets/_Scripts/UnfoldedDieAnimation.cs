@@ -17,6 +17,17 @@ public class UnfoldedDieAnimation : MonoBehaviour
 
     }
 
+    public void PuzzleTransitionStart()
+    {
+        GameManager.Instance.PuzzleTransitionStart();
+    }
+
+    public void PuzzleTransitionEnd()
+    {
+        GameManager.Instance.PuzzleTransitionEnd();
+
+    }
+
     public void Enter()
     {
 
@@ -31,11 +42,6 @@ public class UnfoldedDieAnimation : MonoBehaviour
 
     public void Shake()
     {
-
-        // transform.DOShakePosition(.2f, strength: 40f, vibrato: 20);
-        GetComponent<RectTransform>().DOMove(transform.position + Vector3.up * 100, 5f);
-        // transform.DOMove(transform.position + Vector3.up * 10, 5f);
-
 
     }
 }
