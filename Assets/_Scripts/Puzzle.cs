@@ -29,8 +29,6 @@ public class Puzzle : MonoBehaviour
     bool _isHintActivated;
     List<Side> _sidesTyped;
 
-    public static event Action<string, bool> OnSuccess;
-    public static event Action<string, bool> OnSkip;
 
 
 
@@ -40,11 +38,13 @@ public class Puzzle : MonoBehaviour
         unfoldedDie = GetComponentInChildren<UnfoldedDie>();
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         HintTracker.OnUsedHint += ActivateHint;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         HintTracker.OnUsedHint -= ActivateHint;
     }
 
