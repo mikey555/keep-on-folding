@@ -63,6 +63,16 @@ public class GameManager : Singleton<GameManager>
         words = wordList.Words;
     }
 
+    private void OnEnable() {
+        PlayerActions.OnSubmit += PuzzleTransitionStart;
+        PlayerActions.OnSkip += PuzzleTransitionStart;
+    }
+
+    private void OnDisable() {
+        PlayerActions.OnSubmit -= PuzzleTransitionStart;
+        PlayerActions.OnSkip -= PuzzleTransitionStart;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -178,17 +188,15 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public bool UseHint()
-    {
-        return CurrentPuzzle.ActivateHint();
-    }
+    
 
-    public void PuzzleTransitionStart()
+    public void PuzzleTransitionStart(PlayerActionEventArgs args)
     {
         OnPuzzleTransitionStart?.Invoke();
     }
 
-    public void PuzzleTransitionEnd()
+
+    public void PuzzleTransitionEnd(PlayerActionEventArgs args)
     {
         OnPuzzleTransitionEnd?.Invoke();
     }

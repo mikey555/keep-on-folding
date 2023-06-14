@@ -7,39 +7,11 @@ using UnityEngine.Events;
 
 public class ScoreManager : Singleton<ScoreManager>
 {
-    [SerializeField] int numHintsLeft;
+    
     [SerializeField] StreakTracker streakTracker;
 
-    public int NumHintsLeft
-    {
-        get { return numHintsLeft; }
-        set
-        {
-            if (value < 0) return;
-            numHintsLeft = value;
-            Debug.Log("[DEBUG] Hints left: " + value.ToString());
-            if (value == 0)
-            {
-                UIManager.Instance.DisableHintButton();
-            }
-            else
-            {
-                UIManager.Instance.EnableHintButton();
-            }
-            UIManager.Instance.UpdateHintButtonText(NumHintsLeft);
-        }
-    }
+    
 
-    private void OnEnable()
-    {
-
-    }
-
-    private void OnDisable()
-    {
-
-
-    }
 
 
 
@@ -56,26 +28,9 @@ public class ScoreManager : Singleton<ScoreManager>
 
     }
 
-    public void PlayerSkips()
-    {
+ 
 
-        UIManager.Instance.ShowNumberChange(Constants.SKIP_TIME_PENALTY, isPenalty: true);
-        streakTracker.RestartStreak();
-    }
-
-    public void PlayerPasses()
-    {
-
-        UIManager.Instance.ShowNumberChange(Constants.CORRECT_ANSWER_TIME_BONUS, isPenalty: false);
-        streakTracker.IncreaseStreak();
-    }
-
-    public void UseHint()
-    {
-        var success = GameManager.Instance.UseHint();
-        if (success) NumHintsLeft--;
-
-    }
+   
 
 
 

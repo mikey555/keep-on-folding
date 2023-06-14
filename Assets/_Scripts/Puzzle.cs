@@ -26,20 +26,7 @@ public class Puzzle : MonoBehaviour
         get { return _typedLetters; }
     }
 
-    bool hintActivated;
-    public bool HintActivated
-    {
-        get { return hintActivated; }
-
-    }
-
-
-
-    int _letterCount;
-    public int LetterCount
-    {
-        get { return _letterCount; }
-    }
+    bool _isHintActivated;
     List<Side> _sidesTyped;
 
     public static event Action<string, bool> OnSuccess;
@@ -53,28 +40,28 @@ public class Puzzle : MonoBehaviour
         unfoldedDie = GetComponentInChildren<UnfoldedDie>();
     }
 
+    private void OnEnable() {
+        HintTracker.OnUsedHint += ActivateHint;
+    }
+
+    private void OnDisable() {
+        HintTracker.OnUsedHint -= ActivateHint;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        hintActivated = false;
-        //Time.timeScale = 1f;
+        _isHintActivated = false;
         _typedLetters = "";
-        _letterCount = 0;
         _wordPossibilities = GameManager.Instance.GetWordArray();
 
         var chars = _wordPossibilities[0].ToCharArray();
         _sidesTyped = new List<Side>();
         unfoldedDie.Init(chars);
 
-
-
-        // skip, submit
-
     }
 
 
-
-    // Update is called once per frame
     void Update()
     {
 
@@ -96,20 +83,19 @@ public class Puzzle : MonoBehaviour
             if (side.Letter == letter.ToUpper() && !side.IsTyped)
             {
                 _typedLetters += side.Letter;
-                _letterCount++;
+                Debug.Log("typed letters length:" + _typedLetters.Length.ToString());
                 UIManager.Instance.SetTypedLettersText(_typedLetters);
                 side.MarkAsTyped();
                 _sidesTyped.Add(side);
                 return;
             }
         }
-        unfoldedDie.GetComponent<UnfoldedDieAnimation>().Shake();
+
     }
 
     public void ClearTypedLetters()
     {
         _typedLetters = "";
-        _letterCount = 0;
         UIManager.Instance.SetTypedLettersText(_typedLetters);
 
         foreach (var side in _sidesTyped)
@@ -121,45 +107,19 @@ public class Puzzle : MonoBehaviour
 
     public void ClearLastTypedLetter()
     {
-        if (_letterCount == 0) return;
-        _letterCount--;
-        _typedLetters = _typedLetters.Substring(0, _letterCount);
+        if (_typedLetters.Length == 0) return;
+        _typedLetters = _typedLetters.Substring(0, _typedLetters.Length - 1);
         UIManager.Instance.SetTypedLettersText(_typedLetters);
-        // _typedLettersText.text = _typedLettersText.text.Substring(0, _letterCount);
-        _sidesTyped[_letterCount].MarkAsUntyped();
-        _sidesTyped.RemoveAt(_letterCount);
+        _sidesTyped[_typedLetters.Length].MarkAsUntyped();
+        _sidesTyped.RemoveAt(_typedLetters.Length);
     }
 
-
-    // TODO: rename this and the animator trigger to Success
-    public void Pass()
+    public void ActivateHint()
     {
-        GameManager.Instance.PuzzleTransitionStart();
-        UIManager.Instance.RevealAnswer(_typedLetters, true);
-        ScoreManager.Instance.PlayerPasses();
-        AudioSystem.Instance.PlayBellSound();
-        GetComponent<Animator>().SetBool("Pass", true);
-        Timer.Instance.PlayerPasses();
-    }
-
-    public void Skip()
-    {
-        GameManager.Instance.PuzzleTransitionStart();
-        UIManager.Instance.RevealAnswer(_typedLetters, false);
-        ScoreManager.Instance.PlayerSkips();
-        AudioSystem.Instance.PlayBuzzerSound();
-        GetComponent<Animator>().SetTrigger("Skip");
-        Timer.Instance.PlayerSkips();
-    }
-
-    public bool ActivateHint()
-    {
-        if (hintActivated) return false;
-        hintActivated = true;
+        if (_isHintActivated) return;
+        _isHintActivated = true;
         var firstLetter = _wordPossibilities[0].Substring(0, 1);
-        Debug.Log("First Letter: " + firstLetter);
         unfoldedDie.ActivateHint(firstLetter);
-        return true;
     }
 
     public void Scramble()
@@ -178,36 +138,18 @@ public class Puzzle : MonoBehaviour
         }
     }
 
-    public void Submit()
+    public bool IsSubmissionValid()
     {
-        if (_letterCount != 6) return;
-        if (this.IsWordValid(_typedLetters, _wordPossibilities))
+        if (_typedLetters.Length != 6) return false;
+        foreach (var word in _wordPossibilities)
         {
-            this.Pass();
-
-        }
-
-    }
-
-    public void OnTextInput(char ch)
-    {
-        this.CheckForLetter(ch.ToString());
-    }
-    
-    // TODO: rename to IsSubmissionValid
-    public bool IsWordValid(string wordEntered, string[] wordPossibilities)
-    {
-        foreach (var word in wordPossibilities)
-        {
-            if (word.ToUpper() == wordEntered.ToUpper())
+            if (word.ToUpper() == _typedLetters.ToUpper())
             {
                 return true;
             }
         }
         return false;
     }
-
-
 }
 
 

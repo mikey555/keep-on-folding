@@ -5,43 +5,47 @@ using DG.Tweening;
 
 public class UnfoldedDieAnimation : MonoBehaviour
 {
+    Animator _animator;
+
+    void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-
+        PlayerActions.OnSubmit += PlaySuccessAnimation;
+        PlayerActions.OnSkip += PlaySkipAnimation;
     }
 
-    public void PuzzleTransitionStart()
+    private void OnDisable()
     {
-        GameManager.Instance.PuzzleTransitionStart();
+        PlayerActions.OnSubmit -= PlaySuccessAnimation;
+        PlayerActions.OnSkip -= PlaySkipAnimation;
     }
 
+    // Animation callback
     public void PuzzleTransitionEnd()
     {
-        GameManager.Instance.PuzzleTransitionEnd();
+
+        GameManager.Instance.PuzzleTransitionEnd(new PlayerActionEventArgs());
 
     }
 
-    public void Enter()
+    public void PlaySuccessAnimation(OnSubmitEventArgs args)
     {
-
+        _animator.SetBool("Pass", true);
     }
 
-    public void Skip()
+    public void PlaySkipAnimation(OnSkipEventArgs args)
     {
-
+        _animator.SetTrigger("Skip");
     }
 
-
-
-    public void Shake()
-    {
-
-    }
 }

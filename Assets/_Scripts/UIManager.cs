@@ -14,7 +14,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] TMP_Text timeLeftText;
 
     [SerializeField] TMP_Text streakLengthText;
-    [SerializeField] Button hintButton;
+    
     [SerializeField] Text numberChange;
 
     [SerializeField] Canvas startScreenCanvas;
@@ -29,13 +29,20 @@ public class UIManager : Singleton<UIManager>
     private void OnEnable()
     {
         GameManager.OnGameOver += OnGameOver;
+        PlayerActions.OnSubmit += RevealCorrectAnswer;
+        PlayerActions.OnSkip += RevealSkippedAnswer;
+        PlayerActions.OnSubmit += ShowBonusTimeModification;
+        PlayerActions.OnSkip += ShowPenaltyTimeModification;
 
     }
 
     private void OnDisable()
     {
         GameManager.OnGameOver -= OnGameOver;
-
+        PlayerActions.OnSubmit -= RevealCorrectAnswer;
+        PlayerActions.OnSkip -= RevealSkippedAnswer;
+        PlayerActions.OnSubmit -= ShowBonusTimeModification;
+        PlayerActions.OnSkip -= ShowPenaltyTimeModification;
     }
 
     // Start is called before the first frame update
@@ -68,6 +75,16 @@ public class UIManager : Singleton<UIManager>
              });
     }
 
+    public void RevealCorrectAnswer(OnSubmitEventArgs args)
+    {
+        RevealAnswer(args.Puzzle.TypedLetters, true);
+    }
+
+    public void RevealSkippedAnswer(OnSkipEventArgs args)
+    {
+        RevealAnswer(args.Puzzle.TypedLetters, false);
+    }
+
 
     public void HideAnswer()
     {
@@ -95,7 +112,7 @@ public class UIManager : Singleton<UIManager>
     {
         gameOverCanvas.gameObject.SetActive(true);
         bottomPanelCanvas.gameObject.SetActive(false);
-        
+
     }
 
     public void SetTimeLeft(float timeLeft)
@@ -104,25 +121,9 @@ public class UIManager : Singleton<UIManager>
     }
 
 
-    public void DisableHintButton()
-    {
-        if (!hintButton.IsInteractable()) return;
-        hintButton.interactable = false;
-    }
+    
 
-    public void EnableHintButton()
-    {
-        if (hintButton.IsInteractable()) return;
-        hintButton.interactable = true;
-    }
-
-    public void UpdateHintButtonText(int hintsRemaining)
-    {
-        hintButton.GetComponentInChildren<TMP_Text>().text =
-            string.Format("Use Hint\n<b>{0}</b> Remaining", hintsRemaining);
-    }
-
-    public void ShowNumberChange(float val, bool isPenalty = false)
+    public void ShowTimeModification(float val, bool isPenalty = false)
     {
         var numText = GameObject.Instantiate<Text>(numberChange, timeLeftText.transform);
         var signString = "";
@@ -149,10 +150,17 @@ public class UIManager : Singleton<UIManager>
             {
                 GameObject.Destroy(numText);
             });
-
-
-
     }
+
+    public void ShowBonusTimeModification(OnSubmitEventArgs args) {
+        ShowTimeModification(Constants.CORRECT_ANSWER_TIME_BONUS, false);
+    }
+
+    public void ShowPenaltyTimeModification(OnSkipEventArgs args) {
+        ShowTimeModification(Constants.SKIP_TIME_PENALTY, true);
+    }
+
+
 
 
 

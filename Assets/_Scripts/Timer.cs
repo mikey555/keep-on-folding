@@ -12,6 +12,18 @@ public class Timer : Singleton<Timer>
         _timeLeft = _startingGameDuration;
     }
 
+    private void OnEnable()
+    {
+        PlayerActions.OnSubmit += AddTimeBonus;
+        PlayerActions.OnSkip += AddTimePenalty;
+    }
+
+    private void OnDisable()
+    {
+        PlayerActions.OnSubmit -= AddTimeBonus;
+        PlayerActions.OnSkip -= AddTimePenalty;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -26,12 +38,12 @@ public class Timer : Singleton<Timer>
         }
     }
 
-    public void PlayerSkips()
+    public void AddTimePenalty(OnSkipEventArgs args)
     {
         _timeLeft -= Constants.SKIP_TIME_PENALTY;
     }
 
-    public void PlayerPasses()
+    public void AddTimeBonus(OnSubmitEventArgs args)
     {
         _timeLeft += Constants.CORRECT_ANSWER_TIME_BONUS;
     }

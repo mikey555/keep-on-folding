@@ -14,14 +14,14 @@ public class StreakTracker : MonoBehaviour
     StreakAnimation streakAnim;
 
 
-    [SerializeField] int streakLength;
+    [SerializeField] int _streakLength;
     [SerializeField] int onFireAt;
     public int StreakLength
     {
-        get { return streakLength; }
+        get { return _streakLength; }
         set
         {
-            streakLength = value;
+            _streakLength = value;
             if (value >= onFireAt)
             {
                 streakAnim.EnableFire();
@@ -47,21 +47,33 @@ public class StreakTracker : MonoBehaviour
         StreakLength = 0;
     }
 
+    private void OnEnable() {
+        PlayerActions.OnSubmit += IncreaseStreak;
+        PlayerActions.OnSkip += RestartStreak;
+    }
+
+    private void OnDisable() {
+        PlayerActions.OnSubmit -= IncreaseStreak;
+        PlayerActions.OnSkip -= RestartStreak;
+    }
+
     // Update is called once per frame
     void Update()
     {
 
     }
 
-    public void IncreaseStreak()
+    public void IncreaseStreak(OnSubmitEventArgs args)
     {
         StreakLength++;
     }
 
-    public void RestartStreak()
+    public void RestartStreak(OnSkipEventArgs args)
     {
         StreakLength = 0;
     }
+
+
 
 
 

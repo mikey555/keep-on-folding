@@ -26,12 +26,14 @@ public class AudioSystem : Singleton<AudioSystem>
 
     private void OnEnable()
     {
-
+        PlayerActions.OnSubmit += PlayBellSound;
+        PlayerActions.OnSkip += PlayBuzzerSound;
     }
 
     private void OnDisable()
     {
-
+        PlayerActions.OnSubmit -= PlayBellSound;
+        PlayerActions.OnSkip -= PlayBuzzerSound;
     }
 
     public void PlaySound(AudioClip clip, float volumeScale)
@@ -39,12 +41,12 @@ public class AudioSystem : Singleton<AudioSystem>
         _sfxSource.PlayOneShot(clip, volumeScale);
     }
 
-    public void PlayBuzzerSound()
+    public void PlayBuzzerSound(OnSkipEventArgs args)
     {
         PlaySound(buzzerClip, 1f);
     }
 
-    public void PlayBellSound()
+    public void PlayBellSound(OnSubmitEventArgs args)
     {
         PlaySound(bellClip, 1f);
     }

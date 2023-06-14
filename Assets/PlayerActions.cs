@@ -1,11 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class PlayerActions : MonoBehaviour
 {
     PlayerInputActions _playerInputActions;
+    public static event Action<OnSubmitEventArgs> OnSubmit;
+    public static event Action<OnSkipEventArgs> OnSkip;
 
     void Awake()
     {
@@ -48,15 +52,6 @@ public class PlayerActions : MonoBehaviour
         Keyboard.current.onTextInput -= OnTextInput;
     }
 
-    void EnableAllActions()
-    {
-        _playerInputActions.Enable();
-    }
-
-    void DisableAllActions()
-    {
-        _playerInputActions.Disable();
-    }
 
     public void ClearLastTypedLetter(InputAction.CallbackContext ctx)
     {
@@ -70,7 +65,9 @@ public class PlayerActions : MonoBehaviour
 
     public void Skip(InputAction.CallbackContext ctx)
     {
-        GameManager.Instance.CurrentPuzzle.Skip();
+        var args = new OnSkipEventArgs();
+        args.Puzzle = GameManager.Instance.CurrentPuzzle;
+        OnSkip?.Invoke(args);
     }
 
     public void Scramble(InputAction.CallbackContext ctx)
@@ -80,12 +77,43 @@ public class PlayerActions : MonoBehaviour
 
     public void Submit(InputAction.CallbackContext ctx)
     {
-        GameManager.Instance.CurrentPuzzle.Submit();
+        var puzzle = GameManager.Instance.CurrentPuzzle;
+        if (puzzle.IsSubmissionValid())
+        {
+            var eventArgs = new OnSubmitEventArgs();
+            eventArgs.Puzzle = GameManager.Instance.CurrentPuzzle;
+            OnSubmit?.Invoke(eventArgs);
+
+
+        }
+
     }
 
     public void OnTextInput(char ch)
     {
-        GameManager.Instance.CurrentPuzzle.OnTextInput(ch);
+        GameManager.Instance.CurrentPuzzle.CheckForLetter(ch.ToString());
     }
 
+    void EnableAllActions()
+    {
+        _playerInputActions.Enable();
+    }
+
+    void DisableAllActions()
+    {
+        _playerInputActions.Disable();
+    }
+
+}
+
+public class PlayerActionEventArgs : EventArgs { }
+
+public class OnSkipEventArgs : PlayerActionEventArgs
+{
+    public Puzzle Puzzle;
+}
+
+public class OnSubmitEventArgs : PlayerActionEventArgs
+{
+    public Puzzle Puzzle;
 }
