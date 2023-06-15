@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 
 
-[RequireComponent(typeof(WordList))]
+
 public class GameManager : Singleton<GameManager>
 {
 
@@ -39,21 +39,11 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    WordList wordList;
-    List<string[]> words;
 
 
 
-    
 
-    protected override void Awake()
-    {
-        base.Awake();
 
-        wordList = GetComponent<WordList>();
-        wordList.Init();
-        words = wordList.Words;
-    }
 
     private void OnEnable()
     {
@@ -104,29 +94,6 @@ public class GameManager : Singleton<GameManager>
     {
         GoToGameplay();
     }
-
-
-
-    public string[] GetWordPossibilities()
-    {
-        if (words.Count == 0)
-        {
-            // TODO: you win, no more words
-        }
-        var index = UnityEngine.Random.Range(0, words.Count);
-        var wordArray = words[index];
-        words.Remove(wordArray);
-        Debug.Log(wordArray[0]);
-        return wordArray;
-    }
-
-
-
-
-
-
-
-
 
 
 

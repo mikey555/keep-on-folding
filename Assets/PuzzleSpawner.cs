@@ -30,15 +30,13 @@ public class PuzzleSpawner : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnGameplayStart += SpawnNewPuzzle;
-        PlayerActions.OnSubmit += SpawnNewPuzzle;
-        PlayerActions.OnSkip += SpawnNewPuzzle;
+        UnfoldedDieAnimation.OnExitAnimationComplete += SpawnNewPuzzle;
         GameManager.OnGameOver += DestroyCurrentPuzzle;
     }
 
     private void OnDisable()
     {
-        PlayerActions.OnSubmit -= SpawnNewPuzzle;
-        PlayerActions.OnSkip -= SpawnNewPuzzle;
+        UnfoldedDieAnimation.OnExitAnimationComplete -= SpawnNewPuzzle;
         GameManager.OnGameOver -= DestroyCurrentPuzzle;
     }
 
@@ -48,9 +46,9 @@ public class PuzzleSpawner : MonoBehaviour
 
     }
 
-    public void SpawnNewPuzzle(PlayerActionEventArgs args)
+    public void SpawnNewPuzzle()
     {
-        
+
         if (GameManager.Instance.FoldingGameState == GameManager.GameState.GameOver) return;
         if (CurrentPuzzle != null)
             UnityEngine.Object.Destroy(CurrentPuzzle.gameObject);
@@ -60,17 +58,13 @@ public class PuzzleSpawner : MonoBehaviour
         OnNewPuzzleSpawned?.Invoke(CurrentPuzzle);
     }
 
-    public void SpawnNewPuzzle()
-    {
-        this.SpawnNewPuzzle(null);
-    }
-
-    public void DestroyCurrentPuzzle() 
+    public void DestroyCurrentPuzzle()
     {
         GameObject.Destroy(_currentPuzzle.gameObject);
     }
 }
 
-public interface IGetNewPuzzle {
+public interface IGetNewPuzzle
+{
     public void GetNewPuzzle(Puzzle puzzle);
 }

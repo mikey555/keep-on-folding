@@ -14,6 +14,8 @@ public class Puzzle : MonoBehaviour
     Canvas _canvas;
     UnfoldedDie unfoldedDie;
 
+    [SerializeField] WordList _wordList;
+
 
     string[] _wordPossibilities;
     public string[] WordPossibilities
@@ -34,7 +36,7 @@ public class Puzzle : MonoBehaviour
 
     private void Awake()
     {
-        
+
         unfoldedDie = GetComponentInChildren<UnfoldedDie>();
     }
 
@@ -53,7 +55,7 @@ public class Puzzle : MonoBehaviour
     {
         _isHintActivated = false;
         _typedLetters = "";
-        _wordPossibilities = GameManager.Instance.GetWordPossibilities();
+        _wordPossibilities = _wordList.GetWordPossibilities();
 
         var chars = _wordPossibilities[0].ToCharArray();
         _sidesTyped = new List<Side>();

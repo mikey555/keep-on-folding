@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,8 @@ using DG.Tweening;
 
 public class UnfoldedDieAnimation : MonoBehaviour
 {
-    Animator _animator;
+    [SerializeField] Animator _animator;
+    public static event Action OnExitAnimationComplete;
 
     void Awake()
     {
@@ -46,6 +48,11 @@ public class UnfoldedDieAnimation : MonoBehaviour
     public void PlaySkipAnimation(OnSkipEventArgs args)
     {
         _animator.SetTrigger("Skip");
+    }
+
+    public void ExitAnimationComplete()
+    {
+        OnExitAnimationComplete?.Invoke();
     }
 
 }

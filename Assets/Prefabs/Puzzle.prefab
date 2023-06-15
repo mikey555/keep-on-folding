@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 710142415887954823}
   - component: {fileID: 930415636234044256}
   m_Layer: 5
-  m_Name: PuzzlePrefab
+  m_Name: Puzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,6 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a28460867be4c2f8a03c2ef581ac0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _wordList: {fileID: 0}
 --- !u!1001 &1306930397861581951
 PrefabInstance:
   m_ObjectHideFlags: 0
