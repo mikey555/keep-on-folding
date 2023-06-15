@@ -34,7 +34,7 @@ public class Puzzle : MonoBehaviour
 
     private void Awake()
     {
-
+        
         unfoldedDie = GetComponentInChildren<UnfoldedDie>();
     }
 
@@ -53,7 +53,7 @@ public class Puzzle : MonoBehaviour
     {
         _isHintActivated = false;
         _typedLetters = "";
-        _wordPossibilities = GameManager.Instance.GetWordArray();
+        _wordPossibilities = GameManager.Instance.GetWordPossibilities();
 
         var chars = _wordPossibilities[0].ToCharArray();
         _sidesTyped = new List<Side>();
@@ -66,14 +66,6 @@ public class Puzzle : MonoBehaviour
     {
 
     }
-
-    public void NextPuzzle()
-    {
-
-        GameManager.Instance.NextPuzzle();
-    }
-
-
 
     public void CheckForLetter(string letter)
     {

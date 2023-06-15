@@ -5,11 +5,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
-public class PlayerActions : MonoBehaviour
+public class PlayerActions : MonoBehaviour, IGetNewPuzzle
 {
     PlayerInputActions _playerInputActions;
     public static event Action<OnSubmitEventArgs> OnSubmit;
     public static event Action<OnSkipEventArgs> OnSkip;
+
+    Puzzle _currentPuzzle;
 
     void Awake()
     {
@@ -18,9 +20,7 @@ public class PlayerActions : MonoBehaviour
 
     void Start()
     {
-        GameManager.OnPuzzleTransitionStart += DisableAllActions;
-        GameManager.OnPuzzleTransitionEnd += EnableAllActions;
-        GameManager.OnGameOver += DisableAllActions;
+
     }
 
     // Update is called once per frame
@@ -39,6 +39,11 @@ public class PlayerActions : MonoBehaviour
         _playerInputActions.Player.Submit.performed += Submit;
         Keyboard.current.onTextInput += OnTextInput;
 
+        PuzzleSpawner.OnNewPuzzleSpawned += GetNewPuzzle;
+        GameManager.OnPuzzleTransitionStart += DisableAllActions;
+        GameManager.OnPuzzleTransitionEnd += EnableAllActions;
+        GameManager.OnGameOver += DisableAllActions;
+
     }
 
     private void OnDisable()
@@ -50,38 +55,43 @@ public class PlayerActions : MonoBehaviour
         _playerInputActions.Player.Scramble.performed -= Scramble;
         _playerInputActions.Player.Submit.performed -= Submit;
         Keyboard.current.onTextInput -= OnTextInput;
+
+        PuzzleSpawner.OnNewPuzzleSpawned -= GetNewPuzzle;
+        GameManager.OnPuzzleTransitionStart -= DisableAllActions;
+        GameManager.OnPuzzleTransitionEnd -= EnableAllActions;
+        GameManager.OnGameOver -= DisableAllActions;
     }
 
 
     public void ClearLastTypedLetter(InputAction.CallbackContext ctx)
     {
-        GameManager.Instance.CurrentPuzzle.ClearLastTypedLetter();
+        _currentPuzzle.ClearLastTypedLetter();
     }
 
     public void ClearTypedLetters(InputAction.CallbackContext ctx)
     {
-        GameManager.Instance.CurrentPuzzle.ClearTypedLetters();
+        _currentPuzzle.ClearTypedLetters();
     }
 
     public void Skip(InputAction.CallbackContext ctx)
     {
         var args = new OnSkipEventArgs();
-        args.Puzzle = GameManager.Instance.CurrentPuzzle;
+        args.Puzzle = _currentPuzzle;
         OnSkip?.Invoke(args);
     }
 
     public void Scramble(InputAction.CallbackContext ctx)
     {
-        GameManager.Instance.CurrentPuzzle.Scramble();
+        _currentPuzzle.Scramble();
     }
 
     public void Submit(InputAction.CallbackContext ctx)
     {
-        var puzzle = GameManager.Instance.CurrentPuzzle;
-        if (puzzle.IsSubmissionValid())
+
+        if (_currentPuzzle.IsSubmissionValid())
         {
             var eventArgs = new OnSubmitEventArgs();
-            eventArgs.Puzzle = GameManager.Instance.CurrentPuzzle;
+            eventArgs.Puzzle = _currentPuzzle;
             OnSubmit?.Invoke(eventArgs);
 
 
@@ -91,7 +101,7 @@ public class PlayerActions : MonoBehaviour
 
     public void OnTextInput(char ch)
     {
-        GameManager.Instance.CurrentPuzzle.CheckForLetter(ch.ToString());
+        _currentPuzzle.CheckForLetter(ch.ToString());
     }
 
     void EnableAllActions()
@@ -102,6 +112,11 @@ public class PlayerActions : MonoBehaviour
     void DisableAllActions()
     {
         _playerInputActions.Disable();
+    }
+
+    public void GetNewPuzzle(Puzzle puzzle)
+    {
+        _currentPuzzle = puzzle;
     }
 
 }

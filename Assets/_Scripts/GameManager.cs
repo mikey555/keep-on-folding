@@ -2,11 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Net;
-using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.Events;
+
 
 
 [RequireComponent(typeof(WordList))]
@@ -14,13 +11,12 @@ public class GameManager : Singleton<GameManager>
 {
 
     [SerializeField] ScoreManager scoreManager;
-    [SerializeField] Transform _puzzleSpawnTransform;
-    [SerializeField] Transform _puzzleParent;
+
     [SerializeField] PlayerInputActions _playerInputActions;
 
 
 
-    static bool isGameOver;
+
 
     public enum GameState
     {
@@ -28,7 +24,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     GameState _gameState;
-    public GameState CurrGameState
+    public GameState FoldingGameState
     {
         get { return _gameState; }
     }
@@ -40,7 +36,7 @@ public class GameManager : Singleton<GameManager>
     public static event Action OnPuzzleTransitionEnd;
 
 
-    [SerializeField] Puzzle _puzzlePrefab;
+
 
 
     WordList wordList;
@@ -48,11 +44,7 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    Puzzle _currentPuzzle;
-    public Puzzle CurrentPuzzle
-    {
-        get { return _currentPuzzle; }
-    }
+    
 
     protected override void Awake()
     {
@@ -63,14 +55,18 @@ public class GameManager : Singleton<GameManager>
         words = wordList.Words;
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         PlayerActions.OnSubmit += PuzzleTransitionStart;
         PlayerActions.OnSkip += PuzzleTransitionStart;
+        Timer.OnTimeUp += GoToGameOver;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         PlayerActions.OnSubmit -= PuzzleTransitionStart;
         PlayerActions.OnSkip -= PuzzleTransitionStart;
+        Timer.OnTimeUp -= GoToGameOver;
     }
 
     // Start is called before the first frame update
@@ -78,11 +74,11 @@ public class GameManager : Singleton<GameManager>
     {
 
 
-        isGameOver = false;
-        _gameState = GameState.Gameplay;
+
+        this.GoToGameplay();
 
 
-        NextPuzzle();
+
     }
 
     public void GoToGameStart()
@@ -91,7 +87,7 @@ public class GameManager : Singleton<GameManager>
         OnGameStart?.Invoke();
     }
 
-    public void GoToGameplayStart()
+    public void GoToGameplay()
     {
         _gameState = GameState.Gameplay;
         OnGameplayStart?.Invoke();
@@ -99,25 +95,19 @@ public class GameManager : Singleton<GameManager>
 
     public void GoToGameOver()
     {
+        if (_gameState != GameState.GameOver) return;
         _gameState = GameState.GameOver;
-        GameObject.Destroy(_currentPuzzle.gameObject);
         OnGameOver?.Invoke();
     }
 
     public void RestartGameplay()
     {
-        GoToGameplayStart();
+        GoToGameplay();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
 
-
-    }
-
-    public string[] GetWordArray()
+    public string[] GetWordPossibilities()
     {
         if (words.Count == 0)
         {
@@ -132,52 +122,9 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    public void ShowAnagrams(List<string> words)
-    {
-        var c1 = new HashSet<char>();
-        c1.Add('A');
-        c1.Add('B');
-        c1.Add('C');
-        var c2 = new HashSet<char>();
-        c2.Add('A');
-        c2.Add('B');
-        c2.Add('D');
-        Debug.Log("c1 == c2: " + c1.SetEquals(c2));
-
-        var charArrayList = new List<(string, char[])>();
-        foreach (var word in words)
-        {
-            Debug.Log("Word: " + word);
-            char[] charArray = word.ToCharArray();
-            Debug.Log(charArray.ToString());
-            System.Array.Sort(charArray, Comparer<char>.Default);
-            Debug.Log(charArray.ToString());
-
-            foreach (var charArrayFromList in charArrayList)
-            {
-                if (charArray == charArrayFromList.Item2)
-                {
-                    Debug.Log(word + "/" + charArrayFromList.Item1);
-                }
-            }
-            charArrayList.Add((word, charArray));
-
-        }
 
 
-    }
 
-    public void NextPuzzle()
-    {
-
-        if (_gameState == GameState.GameOver) return;
-        if (_currentPuzzle != null)
-            UnityEngine.Object.Destroy(_currentPuzzle.gameObject);
-        var next = Instantiate<Puzzle>(_puzzlePrefab, _puzzleSpawnTransform.position, Quaternion.identity, _puzzleParent);
-        next.gameObject.SetActive(true);
-        _currentPuzzle = next;
-
-    }
 
 
 
@@ -188,7 +135,7 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    
+
 
     public void PuzzleTransitionStart(PlayerActionEventArgs args)
     {
