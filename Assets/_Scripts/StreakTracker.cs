@@ -44,17 +44,28 @@ public class StreakTracker : MonoBehaviour
 
     void Start()
     {
+        Init();
+    }
+
+    void Init()
+    {
         StreakLength = 0;
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
+        GameManager.OnStartGameplay += Init;
         PlayerActions.OnSubmit += IncreaseStreak;
         PlayerActions.OnSkip += RestartStreak;
+
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
+        GameManager.OnStartGameplay += Init;
         PlayerActions.OnSubmit -= IncreaseStreak;
         PlayerActions.OnSkip -= RestartStreak;
+
     }
 
     // Update is called once per frame
@@ -63,12 +74,12 @@ public class StreakTracker : MonoBehaviour
 
     }
 
-    public void IncreaseStreak(OnSubmitEventArgs args)
+    public void IncreaseStreak(FinishTurnEventArgs args)
     {
         StreakLength++;
     }
 
-    public void RestartStreak(OnSkipEventArgs args)
+    public void RestartStreak(FinishTurnEventArgs args)
     {
         StreakLength = 0;
     }

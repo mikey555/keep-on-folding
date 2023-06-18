@@ -8,8 +8,8 @@ using UnityEngine.Events;
 public class PlayerActions : MonoBehaviour, IGetNewPuzzle
 {
     PlayerInputActions _playerInputActions;
-    public static event Action<OnSubmitEventArgs> OnSubmit;
-    public static event Action<OnSkipEventArgs> OnSkip;
+    public static event Action<FinishTurnEventArgs> OnSubmit;
+    public static event Action<FinishTurnEventArgs> OnSkip;
 
     Puzzle _currentPuzzle;
 
@@ -75,7 +75,7 @@ public class PlayerActions : MonoBehaviour, IGetNewPuzzle
 
     public void Skip(InputAction.CallbackContext ctx)
     {
-        var args = new OnSkipEventArgs();
+        var args = new FinishTurnEventArgs();
         args.Puzzle = _currentPuzzle;
         OnSkip?.Invoke(args);
     }
@@ -90,9 +90,9 @@ public class PlayerActions : MonoBehaviour, IGetNewPuzzle
 
         if (_currentPuzzle.IsSubmissionValid())
         {
-            var eventArgs = new OnSubmitEventArgs();
-            eventArgs.Puzzle = _currentPuzzle;
-            OnSubmit?.Invoke(eventArgs);
+            var args = new FinishTurnEventArgs();
+            args.Puzzle = _currentPuzzle;
+            OnSubmit?.Invoke(args);
 
 
         }
@@ -107,11 +107,15 @@ public class PlayerActions : MonoBehaviour, IGetNewPuzzle
     void EnableAllActions()
     {
         _playerInputActions.Enable();
+        Keyboard.current.onTextInput += OnTextInput;
     }
 
     void DisableAllActions()
     {
         _playerInputActions.Disable();
+        Keyboard.current.onTextInput -= OnTextInput;
+
+        Debug.Log("DisableAllActions()");
     }
 
     public void GetNewPuzzle(Puzzle puzzle)
@@ -123,12 +127,8 @@ public class PlayerActions : MonoBehaviour, IGetNewPuzzle
 
 public class PlayerActionEventArgs : EventArgs { }
 
-public class OnSkipEventArgs : PlayerActionEventArgs
+public class FinishTurnEventArgs : PlayerActionEventArgs
 {
     public Puzzle Puzzle;
 }
 
-public class OnSubmitEventArgs : PlayerActionEventArgs
-{
-    public Puzzle Puzzle;
-}

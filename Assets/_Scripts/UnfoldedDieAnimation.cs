@@ -40,12 +40,12 @@ public class UnfoldedDieAnimation : MonoBehaviour
 
     }
 
-    public void PlaySuccessAnimation(OnSubmitEventArgs args)
+    public void PlaySuccessAnimation(FinishTurnEventArgs args)
     {
         _animator.SetBool("Pass", true);
     }
 
-    public void PlaySkipAnimation(OnSkipEventArgs args)
+    public void PlaySkipAnimation(FinishTurnEventArgs args)
     {
         _animator.SetTrigger("Skip");
     }

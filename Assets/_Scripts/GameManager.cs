@@ -10,17 +10,11 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
 
-    [SerializeField] ScoreManager scoreManager;
-
-    [SerializeField] PlayerInputActions _playerInputActions;
-
-
-
 
 
     public enum GameState
     {
-        Start, Gameplay, GameOver
+        StartScreen, Gameplay, GameOverScreen
     }
 
     GameState _gameState;
@@ -29,77 +23,54 @@ public class GameManager : Singleton<GameManager>
         get { return _gameState; }
     }
 
-    public static event Action OnGameStart;
-    public static event Action OnGameplayStart;
+    public static event Action OnGoToStartScreen;
+    public static event Action OnStartGameplay;
     public static event Action OnGameOver;
     public static event Action OnPuzzleTransitionStart;
     public static event Action OnPuzzleTransitionEnd;
-
-
-
-
-
-
-
-
-
-
 
     private void OnEnable()
     {
         PlayerActions.OnSubmit += PuzzleTransitionStart;
         PlayerActions.OnSkip += PuzzleTransitionStart;
-        Timer.OnTimeUp += GoToGameOver;
+        Timer.OnTimeUp += GoToGameOverScreen;
     }
 
     private void OnDisable()
     {
         PlayerActions.OnSubmit -= PuzzleTransitionStart;
         PlayerActions.OnSkip -= PuzzleTransitionStart;
-        Timer.OnTimeUp -= GoToGameOver;
+        Timer.OnTimeUp -= GoToGameOverScreen;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
-
-
-        this.GoToGameplay();
-
-
-
+        this.GoToStartScreen();
     }
 
-    public void GoToGameStart()
+    public void GoToStartScreen()
     {
-        _gameState = GameState.Start;
-        OnGameStart?.Invoke();
+        _gameState = GameState.StartScreen;
+        OnGoToStartScreen?.Invoke();
     }
 
-    public void GoToGameplay()
+    public void StartGameplay()
     {
         _gameState = GameState.Gameplay;
-        OnGameplayStart?.Invoke();
+        OnStartGameplay?.Invoke();
     }
 
-    public void GoToGameOver()
+    public void GoToGameOverScreen()
     {
-        if (_gameState != GameState.GameOver) return;
-        _gameState = GameState.GameOver;
+        _gameState = GameState.GameOverScreen;
         OnGameOver?.Invoke();
     }
 
-    public void RestartGameplay()
+    public void Button_PlayAgainClicked()
     {
-        GoToGameplay();
-    }
-
-
-
-    public void OnPlayAgain()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        StartGameplay();
     }
 
 
@@ -108,7 +79,6 @@ public class GameManager : Singleton<GameManager>
     {
         OnPuzzleTransitionStart?.Invoke();
     }
-
 
     public void PuzzleTransitionEnd(PlayerActionEventArgs args)
     {

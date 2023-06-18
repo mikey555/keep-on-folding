@@ -29,7 +29,7 @@ public class PuzzleSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnGameplayStart += SpawnNewPuzzle;
+        GameManager.OnStartGameplay += SpawnNewPuzzle;
         UnfoldedDieAnimation.OnExitAnimationComplete += SpawnNewPuzzle;
         GameManager.OnGameOver += DestroyCurrentPuzzle;
     }
@@ -49,9 +49,11 @@ public class PuzzleSpawner : MonoBehaviour
     public void SpawnNewPuzzle()
     {
 
-        if (GameManager.Instance.FoldingGameState == GameManager.GameState.GameOver) return;
+        if (GameManager.Instance.FoldingGameState == GameManager.GameState.GameOverScreen) return;
         if (CurrentPuzzle != null)
             UnityEngine.Object.Destroy(CurrentPuzzle.gameObject);
+        // TODO: RectTransform here is missing on replay (reloading scene)
+        // TODO: typing still possible during game over. extract answer text field from UIManager.
         var next = Instantiate<Puzzle>(_puzzlePrefab, _puzzleSpawnTransform.position, Quaternion.identity, _puzzleParent);
         next.gameObject.SetActive(true);
         CurrentPuzzle = next;

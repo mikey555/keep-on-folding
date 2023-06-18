@@ -2,32 +2,56 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class Timer : Singleton<Timer>
+public class Timer : MonoBehaviour
 {
-    [SerializeField] float _startingGameDuration = 60f;
+    [SerializeField] float _startingTimerDuration = 60f;
     [SerializeField] bool _unlimitedTime;
     public static event Action OnTimeUp;
     float _timeLeft;
     bool _isTimerActive;
+    [SerializeField] TMP_Text timeLeftText;
+    private void Awake()
+    {
+        GameManager.OnStartGameplay += Init;
+        GameManager.OnStartGameplay += StartTimer;
+        PlayerActions.OnSubmit += AddTimeBonus;
+        PlayerActions.OnSkip += AddTimePenalty;
+
+
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.OnStartGameplay += Init;
+        GameManager.OnStartGameplay -= StartTimer;
+        PlayerActions.OnSubmit -= AddTimeBonus;
+        PlayerActions.OnSkip -= AddTimePenalty;
+
+
+    }
+
     void Start()
     {
-        _timeLeft = _startingGameDuration;
+
+    }
+
+    void Init()
+    {
+        _timeLeft = _startingTimerDuration;
+        this.SetTimeLeft(_timeLeft);
         _isTimerActive = false;
     }
 
     private void OnEnable()
     {
-        PlayerActions.OnSubmit += AddTimeBonus;
-        PlayerActions.OnSkip += AddTimePenalty;
-        GameManager.OnGameplayStart += StartTimer;
+
     }
 
     private void OnDisable()
     {
-        PlayerActions.OnSubmit -= AddTimeBonus;
-        PlayerActions.OnSkip -= AddTimePenalty;
-        GameManager.OnGameplayStart -= StartTimer;
+
     }
 
     // Update is called once per frame
@@ -37,8 +61,8 @@ public class Timer : Singleton<Timer>
         if (_timeLeft > 0)
         {
             _timeLeft -= Time.deltaTime;
-            UIManager.Instance.SetTimeLeft(_timeLeft);
-            
+            this.SetTimeLeft(_timeLeft);
+
         }
         else
         {
@@ -47,17 +71,25 @@ public class Timer : Singleton<Timer>
         }
     }
 
-    public void AddTimePenalty(OnSkipEventArgs args)
+    public void AddTimePenalty(FinishTurnEventArgs args)
     {
         _timeLeft -= Constants.SKIP_TIME_PENALTY;
+
     }
 
-    public void AddTimeBonus(OnSubmitEventArgs args)
+    public void AddTimeBonus(FinishTurnEventArgs args)
     {
         _timeLeft += Constants.CORRECT_ANSWER_TIME_BONUS;
     }
 
-    public void StartTimer() {
+    public void StartTimer()
+    {
         _isTimerActive = true;
+        Debug.Log("StartTimer");
+    }
+
+    public void SetTimeLeft(float timeLeft)
+    {
+        timeLeftText.text = Mathf.Ceil(timeLeft).ToString();
     }
 }

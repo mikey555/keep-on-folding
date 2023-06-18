@@ -11,11 +11,11 @@ public class UIManager : Singleton<UIManager>
 {
     [SerializeField] TMP_Text answerText;
     [SerializeField] Color defaultAnswerTextColor = Color.black;
-    [SerializeField] TMP_Text timeLeftText;
+
 
     [SerializeField] TMP_Text streakLengthText;
-    
-    [SerializeField] Text numberChange;
+
+
 
     [SerializeField] Canvas startScreenCanvas;
     [SerializeField] Canvas gameCanvas;
@@ -28,21 +28,24 @@ public class UIManager : Singleton<UIManager>
 
     private void OnEnable()
     {
-        GameManager.OnGameOver += OnGameOver;
+        GameManager.OnGoToStartScreen += GoToStartScreen;
+        GameManager.OnStartGameplay += StartGameplay;
+        GameManager.OnGameOver += GoToGameOverScreen;
         PlayerActions.OnSubmit += RevealCorrectAnswer;
         PlayerActions.OnSkip += RevealSkippedAnswer;
-        PlayerActions.OnSubmit += ShowBonusTimeModification;
-        PlayerActions.OnSkip += ShowPenaltyTimeModification;
+
+
 
     }
 
     private void OnDisable()
     {
-        GameManager.OnGameOver -= OnGameOver;
+        GameManager.OnGoToStartScreen -= GoToStartScreen;
+        GameManager.OnStartGameplay -= StartGameplay;
+        GameManager.OnGameOver -= GoToGameOverScreen;
         PlayerActions.OnSubmit -= RevealCorrectAnswer;
         PlayerActions.OnSkip -= RevealSkippedAnswer;
-        PlayerActions.OnSubmit -= ShowBonusTimeModification;
-        PlayerActions.OnSkip -= ShowPenaltyTimeModification;
+
     }
 
     // Start is called before the first frame update
@@ -69,20 +72,20 @@ public class UIManager : Singleton<UIManager>
         seq.Append(answerText.transform.DOMove(answerText.transform.position + Vector3.up, 1f))
             .Append(DOTween.To(() => answerText.color, x => answerText.color = x, transparentColor, 1).SetOptions(true))
             .OnComplete(() =>
-             {
-                 answerText.text = "";
-                 answerText.color = defaultAnswerTextColor;
-             });
+            {
+                answerText.text = "";
+                answerText.color = defaultAnswerTextColor;
+            });
     }
 
-    public void RevealCorrectAnswer(OnSubmitEventArgs args)
+    public void RevealCorrectAnswer(FinishTurnEventArgs args)
     {
         RevealAnswer(args.Puzzle.TypedLetters, true);
     }
 
-    public void RevealSkippedAnswer(OnSkipEventArgs args)
+    public void RevealSkippedAnswer(FinishTurnEventArgs args)
     {
-        RevealAnswer(args.Puzzle.TypedLetters, false);
+        RevealAnswer(args.Puzzle.WordPossibilities[0], false);
     }
 
 
@@ -96,69 +99,34 @@ public class UIManager : Singleton<UIManager>
         answerText.text = str;
     }
 
-    public void OnGameStart()
+    public void GoToStartScreen()
     {
         startScreenCanvas.gameObject.SetActive(true);
         bottomPanelCanvas.gameObject.SetActive(false);
+        gameOverCanvas.gameObject.SetActive(false);
     }
 
-    public void OnGameplayStart()
+    public void StartGameplay()
     {
         startScreenCanvas.gameObject.SetActive(false);
         bottomPanelCanvas.gameObject.SetActive(true);
+        gameOverCanvas.gameObject.SetActive(false);
     }
 
-    public void OnGameOver()
+    public void GoToGameOverScreen()
     {
-        gameOverCanvas.gameObject.SetActive(true);
+        startScreenCanvas.gameObject.SetActive(false);
         bottomPanelCanvas.gameObject.SetActive(false);
+        gameOverCanvas.gameObject.SetActive(true);
 
     }
 
-    public void SetTimeLeft(float timeLeft)
-    {
-        timeLeftText.text = Mathf.Ceil(timeLeft).ToString();
-    }
 
 
-    
 
-    public void ShowTimeModification(float val, bool isPenalty = false)
-    {
-        var numText = GameObject.Instantiate<Text>(numberChange, timeLeftText.transform);
-        var signString = "";
-        Color startColor;
-        if (!isPenalty)
-        {
-            signString = "+";
-            startColor = Color.green;
-        }
-        else
-        {
-            signString = "-";
-            startColor = Color.red;
-        }
-        var endColor = new Color(startColor.r, startColor.b, startColor.g, 0);
-        numText.color = startColor;
-        numText.text = signString + val.ToString();
-        numText.gameObject.SetActive(true);
-        Sequence fadeOut = DOTween.Sequence();
-        fadeOut
-            .Append(numText.transform.DOMoveY(numText.transform.position.y + 20, 1f))
-            .Join(numText.DOColor(endColor, 2f))
-            .OnComplete(() =>
-            {
-                GameObject.Destroy(numText);
-            });
-    }
 
-    public void ShowBonusTimeModification(OnSubmitEventArgs args) {
-        ShowTimeModification(Constants.CORRECT_ANSWER_TIME_BONUS, false);
-    }
 
-    public void ShowPenaltyTimeModification(OnSkipEventArgs args) {
-        ShowTimeModification(Constants.SKIP_TIME_PENALTY, true);
-    }
+
 
 
 

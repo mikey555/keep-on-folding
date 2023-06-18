@@ -77,7 +77,6 @@ public class Puzzle : MonoBehaviour
             if (side.Letter == letter.ToUpper() && !side.IsTyped)
             {
                 _typedLetters += side.Letter;
-                Debug.Log("typed letters length:" + _typedLetters.Length.ToString());
                 UIManager.Instance.SetTypedLettersText(_typedLetters);
                 side.MarkAsTyped();
                 _sidesTyped.Add(side);
