@@ -9,11 +9,11 @@ using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
-    [SerializeField] TMP_Text answerText;
-    [SerializeField] Color defaultAnswerTextColor = Color.black;
+    
+    
 
 
-    [SerializeField] TMP_Text streakLengthText;
+    
 
 
 
@@ -22,8 +22,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] Canvas gameOverCanvas;
     [SerializeField] Canvas bottomPanelCanvas;
 
-    [SerializeField] Color _correctAnswerColor = Color.HSVToRGB(0.33f, 0.8f, 0.8f);
-    [SerializeField] Color _skipAnswerColor = Color.HSVToRGB(1f, 1f, 0.8f);
+    
 
 
     private void OnEnable()
@@ -31,8 +30,7 @@ public class UIManager : Singleton<UIManager>
         GameManager.OnGoToStartScreen += GoToStartScreen;
         GameManager.OnStartGameplay += StartGameplay;
         GameManager.OnGameOver += GoToGameOverScreen;
-        PlayerActions.OnSubmit += RevealCorrectAnswer;
-        PlayerActions.OnSkip += RevealSkippedAnswer;
+        
 
 
 
@@ -43,8 +41,7 @@ public class UIManager : Singleton<UIManager>
         GameManager.OnGoToStartScreen -= GoToStartScreen;
         GameManager.OnStartGameplay -= StartGameplay;
         GameManager.OnGameOver -= GoToGameOverScreen;
-        PlayerActions.OnSubmit -= RevealCorrectAnswer;
-        PlayerActions.OnSkip -= RevealSkippedAnswer;
+        
 
     }
 
@@ -60,44 +57,7 @@ public class UIManager : Singleton<UIManager>
 
     }
 
-    public void RevealAnswer(string word, bool isCorrect)
-    {
-
-        answerText.text = word;
-        answerText.color = _skipAnswerColor;
-        if (isCorrect) answerText.color = _correctAnswerColor;
-        var transparentColor = new Color(answerText.color.r, answerText.color.g, answerText.color.b, 0);
-
-        Sequence seq = DOTween.Sequence();
-        seq.Append(answerText.transform.DOMove(answerText.transform.position + Vector3.up, 1f))
-            .Append(DOTween.To(() => answerText.color, x => answerText.color = x, transparentColor, 1).SetOptions(true))
-            .OnComplete(() =>
-            {
-                answerText.text = "";
-                answerText.color = defaultAnswerTextColor;
-            });
-    }
-
-    public void RevealCorrectAnswer(FinishTurnEventArgs args)
-    {
-        RevealAnswer(args.Puzzle.TypedLetters, true);
-    }
-
-    public void RevealSkippedAnswer(FinishTurnEventArgs args)
-    {
-        RevealAnswer(args.Puzzle.WordPossibilities[0], false);
-    }
-
-
-    public void HideAnswer()
-    {
-        answerText.text = "";
-    }
-
-    public void SetTypedLettersText(string str)
-    {
-        answerText.text = str;
-    }
+    
 
     public void GoToStartScreen()
     {

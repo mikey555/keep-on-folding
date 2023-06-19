@@ -31,7 +31,7 @@ public class Puzzle : MonoBehaviour
     bool _isHintActivated;
     List<Side> _sidesTyped;
 
-
+    public event Action<string> OnAnswerChanged;
 
 
     private void Awake()
@@ -77,7 +77,7 @@ public class Puzzle : MonoBehaviour
             if (side.Letter == letter.ToUpper() && !side.IsTyped)
             {
                 _typedLetters += side.Letter;
-                UIManager.Instance.SetTypedLettersText(_typedLetters);
+                OnAnswerChanged?.Invoke(_typedLetters);
                 side.MarkAsTyped();
                 _sidesTyped.Add(side);
                 return;
@@ -89,7 +89,7 @@ public class Puzzle : MonoBehaviour
     public void ClearTypedLetters()
     {
         _typedLetters = "";
-        UIManager.Instance.SetTypedLettersText(_typedLetters);
+        OnAnswerChanged?.Invoke(_typedLetters);
 
         foreach (var side in _sidesTyped)
         {
@@ -102,7 +102,7 @@ public class Puzzle : MonoBehaviour
     {
         if (_typedLetters.Length == 0) return;
         _typedLetters = _typedLetters.Substring(0, _typedLetters.Length - 1);
-        UIManager.Instance.SetTypedLettersText(_typedLetters);
+        OnAnswerChanged?.Invoke(_typedLetters);
         _sidesTyped[_typedLetters.Length].MarkAsUntyped();
         _sidesTyped.RemoveAt(_typedLetters.Length);
     }

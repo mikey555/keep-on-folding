@@ -167,15 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14899a46a14d040f8be4a2d2b6d42552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  answerText: {fileID: 232602923}
-  defaultAnswerTextColor: {r: 1, g: 1, b: 1, a: 1}
-  streakLengthText: {fileID: 1139774923}
   startScreenCanvas: {fileID: 151091761}
   gameCanvas: {fileID: 1324174143}
   gameOverCanvas: {fileID: 755358362}
   bottomPanelCanvas: {fileID: 1440872017}
-  _correctAnswerColor: {r: 0.17279997, g: 0.8, b: 0.16, a: 1}
-  _skipAnswerColor: {r: 0.8, g: 0, b: 0, a: 1}
 --- !u!1 &149070695
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +400,7 @@ GameObject:
   - component: {fileID: 232602922}
   - component: {fileID: 232602924}
   - component: {fileID: 232602923}
+  - component: {fileID: 232602925}
   m_Layer: 5
   m_Name: AnswerText
   m_TagString: Untagged
@@ -529,6 +525,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 232602921}
   m_CullTransparentMesh: 1
+--- !u!114 &232602925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232602921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a3381501e88749f5acb36f5203b582f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _correctAnswerColor: {r: 0.17279997, g: 0.8, b: 0.16, a: 1}
+  _skipAnswerColor: {r: 0.8, g: 0, b: 0, a: 1}
+  defaultAnswerTextColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &381717191
 GameObject:
   m_ObjectHideFlags: 0
@@ -1286,7 +1297,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &755358359
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1523,7 +1534,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1370120526}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: OnPlayAgain
+        m_MethodName: Button_PlayAgainClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
