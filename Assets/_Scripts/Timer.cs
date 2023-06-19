@@ -2,18 +2,35 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class Timer : MonoBehaviour
 {
     [SerializeField] float _startingTimerDuration = 60f;
     [SerializeField] bool _unlimitedTime;
     public static event Action OnTimeUp;
+    const int MAX_TIME_ALLOWED_ON_CLOCK = 999;
+    const int WARN_AT_TIME_REMAINING = 10;
     float _timeLeft;
+    Image _image;
+
+    float TimeLeft
+    {
+        get { return _timeLeft; }
+        set
+        {
+            if (value > MAX_TIME_ALLOWED_ON_CLOCK) _timeLeft = 999;
+            _timeLeft = value;
+        }
+    }
     bool _isTimerActive;
     [SerializeField] TMP_Text timeLeftText;
     private void Awake()
     {
+        _image = GetComponent<Image>();
+
         GameManager.OnStartGameplay += Init;
         GameManager.OnStartGameplay += StartTimer;
         PlayerActions.OnSubmit += AddTimeBonus;
@@ -39,8 +56,8 @@ public class Timer : MonoBehaviour
 
     void Init()
     {
-        _timeLeft = _startingTimerDuration;
-        this.SetTimeLeft(_timeLeft);
+        TimeLeft = _startingTimerDuration;
+        this.SetTimeLeftText(TimeLeft);
         _isTimerActive = false;
     }
 
@@ -58,10 +75,10 @@ public class Timer : MonoBehaviour
     void Update()
     {
         if (!_isTimerActive) return;
-        if (_timeLeft > 0)
+        if (TimeLeft > 0)
         {
-            _timeLeft -= Time.deltaTime;
-            this.SetTimeLeft(_timeLeft);
+            TimeLeft -= Time.deltaTime;
+            this.SetTimeLeftText(TimeLeft);
 
         }
         else
@@ -69,17 +86,28 @@ public class Timer : MonoBehaviour
             OnTimeUp?.Invoke();
             _isTimerActive = false;
         }
+        // warning flashes
+        if (TimeLeft < WARN_AT_TIME_REMAINING)
+        {
+            _image.DOColor(Color.red, 0.3f);
+        }
+        else
+        {
+            _image.DOColor(Color.white, 0.3f);
+        }
+
+
     }
 
     public void AddTimePenalty(FinishTurnEventArgs args)
     {
-        _timeLeft -= Constants.SKIP_TIME_PENALTY;
+        TimeLeft -= Constants.SKIP_TIME_PENALTY;
 
     }
 
     public void AddTimeBonus(FinishTurnEventArgs args)
     {
-        _timeLeft += Constants.CORRECT_ANSWER_TIME_BONUS;
+        TimeLeft += Constants.CORRECT_ANSWER_TIME_BONUS;
     }
 
     public void StartTimer()
@@ -88,7 +116,7 @@ public class Timer : MonoBehaviour
         Debug.Log("StartTimer");
     }
 
-    public void SetTimeLeft(float timeLeft)
+    public void SetTimeLeftText(float timeLeft)
     {
         timeLeftText.text = Mathf.Ceil(timeLeft).ToString();
     }

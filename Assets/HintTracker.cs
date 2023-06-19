@@ -18,7 +18,6 @@ public class HintTracker : MonoBehaviour
         {
             if (value < 0) return;
             _numHintsLeft = value;
-            Debug.Log("numHintsLeft: " + _numHintsLeft);
             if (value == 0)
             {
                 this.DisableHintButton();
@@ -75,7 +74,7 @@ public class HintTracker : MonoBehaviour
     public void UpdateHintButtonText(int hintsRemaining)
     {
         _hintButton.GetComponentInChildren<TMP_Text>().text =
-            string.Format("Use Hint\n<b>{0}</b> Remaining", hintsRemaining);
+            string.Format("Use Hint • {0}", hintsRemaining);
     }
 
 
