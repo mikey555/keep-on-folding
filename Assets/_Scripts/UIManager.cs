@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,22 +8,17 @@ using UnityEngine.UI;
 
 
 
-public class UIManager : Singleton<UIManager>
+public class UIManager : MonoBehaviour
 {
-    
-    
-
-
-    
-
-
 
     [SerializeField] Canvas startScreenCanvas;
     [SerializeField] Canvas gameCanvas;
     [SerializeField] Canvas gameOverCanvas;
     [SerializeField] Canvas bottomPanelCanvas;
+    [SerializeField] Button _startGameButton;
+    [SerializeField] Button _restartGameButton;
 
-    
+    public static event Action OnStartScreenTransitionOut_Complete;
 
 
     private void OnEnable()
@@ -30,7 +26,8 @@ public class UIManager : Singleton<UIManager>
         GameManager.OnGoToStartScreen += GoToStartScreen;
         GameManager.OnStartGameplay += StartGameplay;
         GameManager.OnGameOver += GoToGameOverScreen;
-        
+
+        _startGameButton.onClick.AddListener(StartGameClicked);
 
 
 
@@ -41,7 +38,9 @@ public class UIManager : Singleton<UIManager>
         GameManager.OnGoToStartScreen -= GoToStartScreen;
         GameManager.OnStartGameplay -= StartGameplay;
         GameManager.OnGameOver -= GoToGameOverScreen;
-        
+
+        _startGameButton.onClick.RemoveListener(StartGameClicked);
+
 
     }
 
@@ -57,7 +56,7 @@ public class UIManager : Singleton<UIManager>
 
     }
 
-    
+
 
     public void GoToStartScreen()
     {
@@ -66,11 +65,26 @@ public class UIManager : Singleton<UIManager>
         gameOverCanvas.gameObject.SetActive(false);
     }
 
+    public void StartGameClicked()
+    {
+        var seq = startScreenCanvas.GetComponent<StartScreenAnimation>().EaseOutToLeft();
+        seq.AppendCallback(() =>
+        {
+            startScreenCanvas.gameObject.SetActive(false);
+            OnStartScreenTransitionOut_Complete?.Invoke();
+        });
+    }
+
     public void StartGameplay()
     {
-        startScreenCanvas.gameObject.SetActive(false);
-        bottomPanelCanvas.gameObject.SetActive(true);
         gameOverCanvas.gameObject.SetActive(false);
+        var seq = bottomPanelCanvas.GetComponent<BottomPanelAnimation>().BottomPanelTransitionIn();
+        seq.OnComplete(() =>
+        {
+            
+        });
+
+
     }
 
     public void GoToGameOverScreen()
