@@ -29,14 +29,14 @@ public class PuzzleSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        // CountdownToStartTimer.OnTimeUp += SpawnNewPuzzle;
+        
         UnfoldedDieAnimation.OnExitAnimationComplete += SpawnNewPuzzle;
         GameManager.OnGameOver += DestroyCurrentPuzzle;
     }
 
     private void OnDisable()
     {
-        // CountdownToStartTimer.OnTimeUp -= SpawnNewPuzzle;
+        
         UnfoldedDieAnimation.OnExitAnimationComplete -= SpawnNewPuzzle;
         GameManager.OnGameOver -= DestroyCurrentPuzzle;
     }

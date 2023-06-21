@@ -26,11 +26,6 @@ public class UIManager : MonoBehaviour
         GameManager.OnGoToStartScreen += GoToStartScreen;
         GameManager.OnStartGameplay += StartGameplay;
         GameManager.OnGameOver += GoToGameOverScreen;
-
-        // _startGameButton.onClick.AddListener(StartGameClicked);
-
-
-
     }
 
     private void OnDisable()
@@ -38,10 +33,6 @@ public class UIManager : MonoBehaviour
         GameManager.OnGoToStartScreen -= GoToStartScreen;
         GameManager.OnStartGameplay -= StartGameplay;
         GameManager.OnGameOver -= GoToGameOverScreen;
-
-        // _startGameButton.onClick.RemoveListener(StartGameClicked);
-
-
     }
 
     // Start is called before the first frame update
@@ -65,21 +56,10 @@ public class UIManager : MonoBehaviour
         gameOverCanvas.gameObject.SetActive(false);
     }
 
-    // public void StartGameClicked()
-    // {
-    //     var seq = startScreenCanvas.GetComponent<StartScreenAnimation>().EaseOutToLeft();
-    //     seq.AppendCallback(() =>
-    //     {
-    //         startScreenCanvas.gameObject.SetActive(false);
-    //         OnStartScreenTransitionOut_Complete?.Invoke();
-    //     });
-    // }
 
     public void StartGameplay()
     {
         gameOverCanvas.gameObject.SetActive(false);
-
-
 
     }
 

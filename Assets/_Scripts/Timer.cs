@@ -42,13 +42,6 @@ public class Timer : MonoBehaviour
         _isTimerActive = false;
     }
 
-    // public void InitAndStart()
-    // {
-    //     Init();
-    //     StartTimer();
-    // }
-
-
     // Update is called once per frame
     protected virtual void Update()
     {
