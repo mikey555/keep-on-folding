@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     public static event Action OnGoToStartScreen;
+    public static event Action OnPrepForGameplay;
     public static event Action OnStartGameplay;
     public static event Action OnGameOver;
     public static event Action OnPuzzleTransitionStart;
@@ -32,7 +33,7 @@ public class GameManager : Singleton<GameManager>
 
     private void OnEnable()
     {
-        UIManager.OnStartScreenTransitionOut_Complete += StartGameplay;
+        // UIManager.OnStartScreenTransitionOut_Complete += StartGameplay;
         PlayerActions.OnSubmit += PuzzleTransitionStart;
         PlayerActions.OnSkip += PuzzleTransitionStart;
         Timer.OnTimeUp += GoToGameOverScreen;
@@ -40,7 +41,7 @@ public class GameManager : Singleton<GameManager>
 
     private void OnDisable()
     {
-        UIManager.OnStartScreenTransitionOut_Complete -= StartGameplay;
+        // UIManager.OnStartScreenTransitionOut_Complete -= StartGameplay;
         PlayerActions.OnSubmit -= PuzzleTransitionStart;
         PlayerActions.OnSkip -= PuzzleTransitionStart;
         Timer.OnTimeUp -= GoToGameOverScreen;
@@ -58,6 +59,10 @@ public class GameManager : Singleton<GameManager>
         OnGoToStartScreen?.Invoke();
     }
 
+    public void PrepForGameplay()
+    {
+        OnPrepForGameplay?.Invoke();
+    }
     public void StartGameplay()
     {
         _gameState = GameState.Gameplay;

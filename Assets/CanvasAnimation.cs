@@ -14,7 +14,7 @@ public class CanvasAnimation : MonoBehaviour
     protected virtual void Awake()
     {
         _canvas = GetComponentInParent<Canvas>();
-        _canvasPos = _canvas.transform.position;
+        _canvasPos = _canvas.transform.localPosition;
     }
 
     void Start()
