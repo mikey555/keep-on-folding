@@ -10,7 +10,8 @@ public class HintTracker : MonoBehaviour
 {
     [SerializeField] Button _hintButton;
     public static event Action OnUsedHint;
-    [SerializeField] int _numHintsLeft = 5;
+    int _numHintsLeft;
+    [SerializeField] int _startingNumHints = 5;
     public int NumHintsLeft
     {
         get { return _numHintsLeft; }
@@ -33,11 +34,12 @@ public class HintTracker : MonoBehaviour
 
     void Start()
     {
-
+        Init();
     }
 
     private void OnEnable()
     {
+        GameManager.OnTransitionToGameplay += Init;
         GameManager.OnTransitionToGameplay += DisableHintButton;
         GameManager.OnPuzzleTransitionEnd += EnableHintButton;
         _hintButton.onClick.AddListener(UseHint);
@@ -45,6 +47,7 @@ public class HintTracker : MonoBehaviour
 
     private void OnDisable()
     {
+        GameManager.OnTransitionToGameplay -= Init;
         GameManager.OnTransitionToGameplay -= DisableHintButton;
         GameManager.OnPuzzleTransitionEnd -= EnableHintButton;
         _hintButton.onClick.RemoveListener(UseHint);
@@ -77,6 +80,11 @@ public class HintTracker : MonoBehaviour
     {
         _hintButton.GetComponentInChildren<TMP_Text>().text =
             string.Format("Use Hint • {0}", hintsRemaining);
+    }
+
+    public void Init()
+    {
+        NumHintsLeft = _startingNumHints;
     }
 
 

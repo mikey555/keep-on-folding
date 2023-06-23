@@ -14,19 +14,18 @@ public class GameTimer : Timer
 
         _image = GetComponent<Image>();
 
-        GameManager.OnStartGameplay += InitAndStart;
+        GameManager.OnTransitionToGameplay += Init;
+        GameManager.OnStartGameplay += StartTimer;
         PlayerActions.OnSubmit += AddTime;
         PlayerActions.OnSkip += SubtractTime;
-        GameManager.OnGameOver += Restart;
     }
 
     private void OnDestroy()
     {
-        GameManager.OnStartGameplay -= InitAndStart;
+        GameManager.OnTransitionToGameplay -= Init;
+        GameManager.OnStartGameplay -= StartTimer;
         PlayerActions.OnSubmit -= AddTime;
         PlayerActions.OnSkip -= SubtractTime;
-        GameManager.OnGameOver -= Restart;
-
     }
 
     // Update is called once per frame

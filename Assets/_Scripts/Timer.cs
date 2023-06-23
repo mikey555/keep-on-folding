@@ -42,14 +42,6 @@ public class Timer : MonoBehaviour
         _isTimerActive = false;
     }
 
-    // public void Init(float startingTimerDuration, TMP_Text text)
-    // {
-
-    //     _startingTimerDuration = startingTimerDuration;
-    //     _timeLeftText = text;
-    //     Init();
-    // }
-
     // Update is called once per frame
     protected virtual void Update()
     {
@@ -74,7 +66,6 @@ public class Timer : MonoBehaviour
     public void SubtractTime(FinishTurnEventArgs args)
     {
         TimeLeft -= Constants.SKIP_TIME_PENALTY;
-
     }
 
     public void AddTime(FinishTurnEventArgs args)

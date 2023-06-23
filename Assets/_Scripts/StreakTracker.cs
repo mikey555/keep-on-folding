@@ -54,7 +54,7 @@ public class StreakTracker : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnStartGameplay += Init;
+        GameManager.OnTransitionToGameplay += Init;
         PlayerActions.OnSubmit += IncreaseStreak;
         PlayerActions.OnSkip += RestartStreak;
 
@@ -62,7 +62,7 @@ public class StreakTracker : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.OnStartGameplay += Init;
+        GameManager.OnTransitionToGameplay -= Init;
         PlayerActions.OnSubmit -= IncreaseStreak;
         PlayerActions.OnSkip -= RestartStreak;
 
