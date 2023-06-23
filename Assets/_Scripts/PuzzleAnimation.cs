@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class UnfoldedDieAnimation : MonoBehaviour
+public class PuzzleAnimation : MonoBehaviour
 {
-    [SerializeField] Animator _animator;
+    Animator _animator;
     public static event Action OnExitAnimationComplete;
 
     void Awake()

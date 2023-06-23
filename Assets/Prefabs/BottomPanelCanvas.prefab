@@ -91,7 +91,6 @@ GameObject:
   - component: {fileID: 4084618364676295647}
   - component: {fileID: 4084618364676295646}
   - component: {fileID: 4084618364676295617}
-  - component: {fileID: 4084618364676295645}
   m_Layer: 0
   m_Name: BottomPanelCanvas
   m_TagString: Untagged
@@ -182,19 +181,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &4084618364676295645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4084618364676295619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62fc2aebdfaef44e0bb9a2b08a9d3e30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animatedElement: {fileID: 4084618364403276162}
 --- !u!1001 &2721035244413163450
 PrefabInstance:
   m_ObjectHideFlags: 0

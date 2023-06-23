@@ -38,12 +38,14 @@ public class HintTracker : MonoBehaviour
 
     private void OnEnable()
     {
+        GameManager.OnTransitionToGameplay += DisableHintButton;
         GameManager.OnPuzzleTransitionEnd += EnableHintButton;
         _hintButton.onClick.AddListener(UseHint);
     }
 
     private void OnDisable()
     {
+        GameManager.OnTransitionToGameplay -= DisableHintButton;
         GameManager.OnPuzzleTransitionEnd -= EnableHintButton;
         _hintButton.onClick.RemoveListener(UseHint);
     }

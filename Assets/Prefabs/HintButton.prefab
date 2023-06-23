@@ -260,7 +260,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2120199137119237722}
         m_TargetAssemblyTypeName: HintTracker, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: UseHint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

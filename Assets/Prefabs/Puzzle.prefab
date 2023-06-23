@@ -127,10 +127,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 186852142157473384}
-  - component: {fileID: 4141698218799618446}
-  - component: {fileID: 4749733539577863019}
   - component: {fileID: 710142415887954823}
   - component: {fileID: 930415636234044256}
+  - component: {fileID: 3865672644154453512}
   m_Layer: 5
   m_Name: Puzzle
   m_TagString: Untagged
@@ -160,30 +159,6 @@ RectTransform:
   m_AnchoredPosition: {x: 158.55, y: 0}
   m_SizeDelta: {x: 417.1, y: 309.6}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4141698218799618446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6436818597294753776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96f255274bff94dfb90011515782253b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4749733539577863019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6436818597294753776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 104c540978cc04a17ae8d36960d8da0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &710142415887954823
 Animator:
   serializedVersion: 4
@@ -217,6 +192,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wordList: {fileID: 0}
+--- !u!114 &3865672644154453512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6436818597294753776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0af1288eae904dd8b4dc3d61be6a823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1306930397861581951
 PrefabInstance:
   m_ObjectHideFlags: 0

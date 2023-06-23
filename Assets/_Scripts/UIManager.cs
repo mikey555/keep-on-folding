@@ -11,12 +11,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
 
-    [SerializeField] Canvas startScreenCanvas;
+    [SerializeField] ModalScreenAnimation _modalAnim;
     [SerializeField] Canvas gameCanvas;
-    [SerializeField] Canvas gameOverCanvas;
+
     [SerializeField] Canvas bottomPanelCanvas;
-    [SerializeField] Button _startGameButton;
-    [SerializeField] Button _restartGameButton;
 
     // public static event Action OnStartScreenTransitionOut_Complete;
 
@@ -51,23 +49,18 @@ public class UIManager : MonoBehaviour
 
     public void GoToStartScreen()
     {
-        startScreenCanvas.gameObject.SetActive(true);
-        // bottomPanelCanvas.gameObject.SetActive(false);
-        gameOverCanvas.gameObject.SetActive(false);
+        _modalAnim.StartScreenModalIn();
     }
 
 
     public void StartGameplay()
     {
-        gameOverCanvas.gameObject.SetActive(false);
 
     }
 
     public void GoToGameOverScreen()
     {
-        startScreenCanvas.gameObject.SetActive(false);
-        // bottomPanelCanvas.gameObject.SetActive(false);
-        gameOverCanvas.gameObject.SetActive(true);
+        _modalAnim.GameOverModalIn();
 
     }
 

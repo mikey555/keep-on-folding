@@ -3,42 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using System.Timers;
 
-public class CountdownClicker : MonoBehaviour
+public class CountdownClicker : Timer
 {
-    TMP_Text _text;
-    int _number;
-    [SerializeField] int _startingNumber;
+    
     private void Awake()
     {
-        _text = GetComponent<TMP_Text>();
+        // base._timeLeftText = GetComponent<TMP_Text>();
+        // _timer = new System.Timers.Timer(1000); // elapse each second
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        _number = _startingNumber;
-        SetTextTo(_startingNumber.ToString());
+        
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
+        
+        // TODO: Seeems like this event never was invoked
+        // GameManager.OnGameOver += Restart;
 
     }
 
-    public void SetTextTo(string str)
+    private void OnDisable()
     {
-        _text.text = str;
+        // GameManager.OnGameOver -= Restart;
     }
 
-    public void Decrement()
-    {
-
-        if (_number >= 1) _number -= 1;
-        SetTextTo(_number.ToString());
+    
 
 
+    
 
-    }
+
+
+  
 }

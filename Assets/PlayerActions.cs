@@ -20,7 +20,7 @@ public class PlayerActions : MonoBehaviour, IGetNewPuzzle
 
     void Start()
     {
-
+        DisableAllActions();
     }
 
     // Update is called once per frame
@@ -39,6 +39,8 @@ public class PlayerActions : MonoBehaviour, IGetNewPuzzle
         _playerInputActions.Player.Submit.performed += Submit;
         Keyboard.current.onTextInput += OnTextInput;
 
+        GameManager.OnTransitionToGameplay += DisableAllActions;
+        GameManager.OnStartGameplay += EnableAllActions;
         PuzzleSpawner.OnNewPuzzleSpawned += GetNewPuzzle;
         GameManager.OnPuzzleTransitionStart += DisableAllActions;
         GameManager.OnPuzzleTransitionEnd += EnableAllActions;
@@ -56,6 +58,8 @@ public class PlayerActions : MonoBehaviour, IGetNewPuzzle
         _playerInputActions.Player.Submit.performed -= Submit;
         Keyboard.current.onTextInput -= OnTextInput;
 
+        GameManager.OnTransitionToGameplay -= DisableAllActions;
+        GameManager.OnStartGameplay -= EnableAllActions;
         PuzzleSpawner.OnNewPuzzleSpawned -= GetNewPuzzle;
         GameManager.OnPuzzleTransitionStart -= DisableAllActions;
         GameManager.OnPuzzleTransitionEnd -= EnableAllActions;

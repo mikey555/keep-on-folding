@@ -14,15 +14,18 @@ public class GameTimer : Timer
 
         _image = GetComponent<Image>();
 
+        GameManager.OnStartGameplay += InitAndStart;
         PlayerActions.OnSubmit += AddTime;
         PlayerActions.OnSkip += SubtractTime;
+        GameManager.OnGameOver += Restart;
     }
 
     private void OnDestroy()
     {
+        GameManager.OnStartGameplay -= InitAndStart;
         PlayerActions.OnSubmit -= AddTime;
         PlayerActions.OnSkip -= SubtractTime;
-
+        GameManager.OnGameOver -= Restart;
 
     }
 

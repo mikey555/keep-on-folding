@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4829835183678941088}
   - component: {fileID: 5370211084752179707}
   m_Layer: 5
-  m_Name: Timer
+  m_Name: GameTimer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingTimerDuration: 60
   _unlimitedTime: 0
-  timeLeftText: {fileID: 4829835185452693541}
+  _timeLeftText: {fileID: 0}
 --- !u!222 &4829835183678941090
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingTimerDuration: 60
   _unlimitedTime: 0
-  timeLeftText: {fileID: 4829835185452693541}
+  _timeLeftText: {fileID: 4829835185452693541}
 --- !u!1 &4829835184225371286
 GameObject:
   m_ObjectHideFlags: 0

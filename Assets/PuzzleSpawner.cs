@@ -6,6 +6,7 @@ public class PuzzleSpawner : MonoBehaviour
     [SerializeField] Puzzle _puzzlePrefab;
     [SerializeField] Transform _puzzleSpawnTransform;
     [SerializeField] Transform _puzzleParent;
+    bool _isSpawning;
 
     Puzzle _currentPuzzle;
     public Puzzle CurrentPuzzle
@@ -18,26 +19,31 @@ public class PuzzleSpawner : MonoBehaviour
 
     private void Awake()
     {
-        _puzzleParent = transform;
+        _puzzleParent = GetComponentInParent<Canvas>().transform;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
+        _isSpawning = false;
     }
 
     private void OnEnable()
     {
-        
-        UnfoldedDieAnimation.OnExitAnimationComplete += SpawnNewPuzzle;
+
+        GameManager.OnTransitionToGameplay += EnableSpawning;
+        GameManager.OnStartGameplay += SpawnNewPuzzle;
+        PuzzleAnimation.OnExitAnimationComplete += SpawnNewPuzzle;
+        GameManager.OnGameOver += DisableSpawning;
         GameManager.OnGameOver += DestroyCurrentPuzzle;
     }
 
     private void OnDisable()
     {
-        
-        UnfoldedDieAnimation.OnExitAnimationComplete -= SpawnNewPuzzle;
+        GameManager.OnTransitionToGameplay -= EnableSpawning;
+        GameManager.OnStartGameplay -= SpawnNewPuzzle;
+        PuzzleAnimation.OnExitAnimationComplete -= SpawnNewPuzzle;
+        GameManager.OnGameOver -= DisableSpawning;
         GameManager.OnGameOver -= DestroyCurrentPuzzle;
     }
 
@@ -50,7 +56,7 @@ public class PuzzleSpawner : MonoBehaviour
     public void SpawnNewPuzzle()
     {
 
-        if (GameManager.Instance.FoldingGameState == GameManager.GameState.GameOverScreen) return;
+        if (!_isSpawning) return;
         if (CurrentPuzzle != null)
             UnityEngine.Object.Destroy(CurrentPuzzle.gameObject);
         var next = Instantiate<Puzzle>(_puzzlePrefab, _puzzleSpawnTransform.position, Quaternion.identity, _puzzleParent);
@@ -62,6 +68,17 @@ public class PuzzleSpawner : MonoBehaviour
     public void DestroyCurrentPuzzle()
     {
         GameObject.Destroy(_currentPuzzle.gameObject);
+        _currentPuzzle = null;
+    }
+
+    public void EnableSpawning()
+    {
+        _isSpawning = true;
+    }
+
+    public void DisableSpawning()
+    {
+        _isSpawning = false;
     }
 }
 

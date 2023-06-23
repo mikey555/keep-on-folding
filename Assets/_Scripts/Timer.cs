@@ -10,29 +10,29 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] protected float _startingTimerDuration = 60f;
     [SerializeField] protected bool _unlimitedTime;
-    public static event Action OnTimeUp;
+    public event Action OnTimeUp;
     protected const int MAX_TIME_ALLOWED_ON_CLOCK = 999;
 
     protected float _timeLeft;
 
 
-    protected float TimeLeft
+    public float TimeLeft
     {
         get { return _timeLeft; }
-        set
+        protected set
         {
             if (value > MAX_TIME_ALLOWED_ON_CLOCK) _timeLeft = 999;
             _timeLeft = value;
         }
     }
     protected bool _isTimerActive;
-    [SerializeField] TMP_Text timeLeftText;
+    [SerializeField] protected TMP_Text _timeLeftText;
 
 
 
     void Start()
     {
-        Init();
+        SetTimeLeftText(_startingTimerDuration);
     }
 
     protected void Init()
@@ -42,10 +42,18 @@ public class Timer : MonoBehaviour
         _isTimerActive = false;
     }
 
+    // public void Init(float startingTimerDuration, TMP_Text text)
+    // {
+
+    //     _startingTimerDuration = startingTimerDuration;
+    //     _timeLeftText = text;
+    //     Init();
+    // }
+
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (!_isTimerActive) return;
+        if (!_isTimerActive || _unlimitedTime) return;
         if (TimeLeft > 0)
         {
             TimeLeft -= Time.deltaTime;
@@ -56,9 +64,11 @@ public class Timer : MonoBehaviour
             OnTimeUp?.Invoke();
             _isTimerActive = false;
         }
+    }
 
-
-
+    public void Restart()
+    {
+        Init();
     }
 
     public void SubtractTime(FinishTurnEventArgs args)
@@ -77,8 +87,14 @@ public class Timer : MonoBehaviour
         _isTimerActive = true;
     }
 
+    public void InitAndStart()
+    {
+        Init();
+        StartTimer();
+    }
+
     public void SetTimeLeftText(float timeLeft)
     {
-        timeLeftText.text = Mathf.Ceil(timeLeft).ToString();
+        _timeLeftText.text = Mathf.Ceil(timeLeft).ToString();
     }
 }

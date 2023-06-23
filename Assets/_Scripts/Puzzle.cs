@@ -12,7 +12,6 @@ using static ExtensionMethods.ListExtensions;
 public class Puzzle : MonoBehaviour
 {
     Canvas _canvas;
-    UnfoldedDie unfoldedDie;
 
     [SerializeField] WordList _wordList;
 
@@ -30,14 +29,19 @@ public class Puzzle : MonoBehaviour
 
     bool _isHintActivated;
     List<Side> _sidesTyped;
+    List<Side> _sides;
+    char[] chars;
+    public List<Side> Sides {
+        get{ return _sides; }
+    }
 
     public event Action<string> OnAnswerChanged;
 
 
     private void Awake()
     {
-
-        unfoldedDie = GetComponentInChildren<UnfoldedDie>();
+        _sides = new List<Side>(GetComponentsInChildren<Side>());
+        
     }
 
     private void OnEnable()
@@ -59,7 +63,17 @@ public class Puzzle : MonoBehaviour
 
         var chars = _wordPossibilities[0].ToCharArray();
         _sidesTyped = new List<Side>();
-        unfoldedDie.Init(chars);
+        
+
+        // from UnfoldedDie
+        this.chars = chars;
+        var numbers = new List<int>() { 1, 2, 3, 4, 5, 6 };
+        foreach (var side in _sides)
+        {
+            var randomIndex = numbers[UnityEngine.Random.Range(0, numbers.Count)];
+            numbers.Remove(randomIndex);
+            side.Letter = chars[randomIndex-1].ToString().ToUpper();
+        }
 
     }
 
@@ -72,7 +86,7 @@ public class Puzzle : MonoBehaviour
     public void CheckForLetter(string letter)
     {
 
-        foreach (var side in unfoldedDie.Sides)
+        foreach (var side in Sides)
         {
             if (side.Letter == letter.ToUpper() && !side.IsTyped)
             {
@@ -112,22 +126,22 @@ public class Puzzle : MonoBehaviour
         if (_isHintActivated) return;
         _isHintActivated = true;
         var firstLetter = _wordPossibilities[0].Substring(0, 1);
-        unfoldedDie.ActivateHint(firstLetter);
+        Sides.Find(x => x.Letter.ToUpper() == firstLetter.ToUpper()).MarkAsHint();
     }
 
     public void Scramble()
     {
         // unfoldedDie.Scramble()
         var posList = new List<Vector3>();
-        var sides = unfoldedDie.Sides;
-        foreach (var side in sides)
+        
+        foreach (var side in Sides)
         {
             posList.Add(side.transform.position);
         }
         posList.Shuffle<Vector3>(new System.Random());
         for (var i = 0; i < posList.Count; i++)
         {
-            sides[i].transform.position = posList[i];
+            Sides[i].transform.position = posList[i];
         }
     }
 

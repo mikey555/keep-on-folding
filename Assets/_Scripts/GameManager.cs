@@ -14,7 +14,7 @@ public class GameManager : Singleton<GameManager>
 
     public enum GameState
     {
-        StartScreen, Gameplay, GameOverScreen
+        StartScreen, TransitionToGameplay, Gameplay, GameOverScreen
     }
 
     GameState _gameState;
@@ -24,19 +24,19 @@ public class GameManager : Singleton<GameManager>
     }
 
     public static event Action OnGoToStartScreen;
-    public static event Action OnPrepForGameplay;
+    public static event Action OnTransitionToGameplay;
     public static event Action OnStartGameplay;
     public static event Action OnGameOver;
     public static event Action OnPuzzleTransitionStart;
     public static event Action OnPuzzleTransitionEnd;
 
+    [SerializeField] Timer _gameTimer;
 
     private void OnEnable()
-    {
-        
+    {   
         PlayerActions.OnSubmit += PuzzleTransitionStart;
         PlayerActions.OnSkip += PuzzleTransitionStart;
-        Timer.OnTimeUp += GoToGameOverScreen;
+        _gameTimer.OnTimeUp += GoToGameOverScreen;
     }
 
     private void OnDisable()
@@ -44,7 +44,7 @@ public class GameManager : Singleton<GameManager>
         
         PlayerActions.OnSubmit -= PuzzleTransitionStart;
         PlayerActions.OnSkip -= PuzzleTransitionStart;
-        Timer.OnTimeUp -= GoToGameOverScreen;
+        _gameTimer.OnTimeUp -= GoToGameOverScreen;
     }
 
     // Start is called before the first frame update
@@ -59,9 +59,9 @@ public class GameManager : Singleton<GameManager>
         OnGoToStartScreen?.Invoke();
     }
 
-    public void PrepForGameplay()
+    public void TransitionToGameplay()
     {
-        OnPrepForGameplay?.Invoke();
+        OnTransitionToGameplay?.Invoke();
     }
     public void StartGameplay()
     {
