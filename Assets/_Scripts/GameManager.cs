@@ -18,6 +18,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     GameState _gameState;
+    [SerializeField] TransitionDirector _transitionDirector;
     public GameState FoldingGameState
     {
         get { return _gameState; }
@@ -33,7 +34,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Timer _gameTimer;
 
     private void OnEnable()
-    {   
+    {
         PlayerActions.OnSubmit += PuzzleTransitionStart;
         PlayerActions.OnSkip += PuzzleTransitionStart;
         _gameTimer.OnTimeUp += GoToGameOverScreen;
@@ -41,7 +42,7 @@ public class GameManager : Singleton<GameManager>
 
     private void OnDisable()
     {
-        
+
         PlayerActions.OnSubmit -= PuzzleTransitionStart;
         PlayerActions.OnSkip -= PuzzleTransitionStart;
         _gameTimer.OnTimeUp -= GoToGameOverScreen;
@@ -61,8 +62,24 @@ public class GameManager : Singleton<GameManager>
 
     public void TransitionToGameplay()
     {
+
+        if (_gameState == GameState.StartScreen)
+            _transitionDirector.TransitionFromStartScreenToGameplay();
+        if (_gameState == GameState.GameOverScreen)
+            _transitionDirector.TransitionFromGameOverToGameplay();
+
+        _gameState = GameState.TransitionToGameplay;
         OnTransitionToGameplay?.Invoke();
     }
+
+    public void TransitionFromGameOverToGameplay()
+    {
+
+        _transitionDirector.TransitionFromGameOverToGameplay();
+        _gameState = GameState.TransitionToGameplay;
+        OnTransitionToGameplay?.Invoke();
+    }
+
     public void StartGameplay()
     {
         _gameState = GameState.Gameplay;
@@ -92,5 +109,6 @@ public class GameManager : Singleton<GameManager>
     {
         OnPuzzleTransitionEnd?.Invoke();
     }
+
 
 }

@@ -15,7 +15,7 @@ public class Timer : MonoBehaviour
 
     protected float _timeLeft;
 
-
+    [SerializeField] bool _hideTimeOnTimeUp = false;
     public float TimeLeft
     {
         get { return _timeLeft; }
@@ -37,6 +37,7 @@ public class Timer : MonoBehaviour
 
     protected void Init()
     {
+
         TimeLeft = _startingTimerDuration;
         this.SetTimeLeftText(TimeLeft);
         _isTimerActive = false;
@@ -55,12 +56,8 @@ public class Timer : MonoBehaviour
         {
             OnTimeUp?.Invoke();
             _isTimerActive = false;
+            if (_hideTimeOnTimeUp) HideTime();
         }
-    }
-
-    public void Restart()
-    {
-        Init();
     }
 
     public void SubtractTime(FinishTurnEventArgs args)
@@ -76,6 +73,7 @@ public class Timer : MonoBehaviour
     public void StartTimer()
     {
         _isTimerActive = true;
+        ShowTime();
     }
 
     public void InitAndStart()
@@ -83,6 +81,9 @@ public class Timer : MonoBehaviour
         Init();
         StartTimer();
     }
+
+    public void ShowTime() { _timeLeftText.gameObject.SetActive(true); }
+    public void HideTime() { _timeLeftText.gameObject.SetActive(false); }
 
     public void SetTimeLeftText(float timeLeft)
     {

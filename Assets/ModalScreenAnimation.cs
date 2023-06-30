@@ -6,77 +6,38 @@ using UnityEngine.UI;
 using DG.Tweening;
 using static ExtensionMethods.TransformExtensions;
 
-public class ModalScreenAnimation : CanvasAnimation
+public class ModalScreenAnimation : MonoBehaviour
 {
-    [SerializeField] GameObject _startScreenModal;
-    [SerializeField] GameObject _gameOverModal;
 
-    GameObject _modalLayer;
-    public GameObject ModalLayer
-    {
-        get { return _modalLayer; }
-    }
-    [SerializeField] Image _backgroundLayer; // e.g., grey semi-transparent panel
-    public Image BackgroundLayer
-    {
-        get { return _backgroundLayer; }
-    }
-
-
-
-    protected override void Awake()
-    {
-        base.Awake();
-    }
     private void OnEnable()
     {
-        GameManager.OnGoToStartScreen += StartScreenModalIn;
-        GameManager.OnGameOver += GameOverModalIn;
+
     }
 
     private void OnDisable()
     {
-        GameManager.OnGoToStartScreen -= StartScreenModalIn;
-        GameManager.OnGameOver -= GameOverModalIn;
+
     }
 
-    void EaseInFromRight(GameObject modal)
+    public Sequence EaseInFromRight()
     {
-        float duration = 0.5f;
-        modal.SetActive(true);
-        modal.transform.SetLocalX(1000f);
-        _backgroundLayer.gameObject.SetActive(true);
+        var duration = 0.3f;
+        gameObject.SetActive(true);
+        transform.SetLocalX(1000f);
 
         Sequence seq = DOTween.Sequence();
-        seq.Append(modal.transform.DOLocalMoveX(0, duration).SetEase(Ease.InCubic))
-            .Join(_backgroundLayer.DOColor(Color.clear, duration));
-
-
-
+        seq.Append(transform.DOLocalMoveX(0, duration).SetEase(Ease.InSine));
+        return seq;
     }
 
     // Director is doing this now
-    void EaseOutToLeft(GameObject modal)
+    public Sequence EaseOutToLeft()
     {
-        float duration = 0.5f;
+        var duration = 0.3f;
 
         Sequence seq = DOTween.Sequence();
-        seq.Append(modal.transform.DOLocalMoveX(-1000, duration).SetEase(Ease.OutCubic))
-            .Join(_backgroundLayer.DOColor(Color.clear, duration))
-            .AppendCallback(() =>
-            {
-                modal.SetActive(false);
-                _backgroundLayer.gameObject.SetActive(false);
-            });
+        seq.Append(transform.DOLocalMoveX(-1000, duration).SetEase(Ease.InSine));
+        return seq;
     }
 
-    public void StartScreenModalIn()
-    {
-        EaseInFromRight(_startScreenModal);
-    }
-
-    public void GameOverModalIn()
-    {
-        EaseInFromRight(_gameOverModal);
-    }
 }

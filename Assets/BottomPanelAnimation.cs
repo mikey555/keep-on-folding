@@ -4,9 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using static ExtensionMethods.TransformExtensions;
 
 public class BottomPanelAnimation : CanvasAnimation
 {
+    [SerializeField] Vector3 _hidePos;
+    [SerializeField] Vector3 _showPos;
+
+    private void Awake()
+    {
+
+        _hidePos = _animatedElement.transform.localPosition;
+        _showPos = _hidePos + 120 * Vector3.up;
+    }
+
 
     private void OnEnable()
     {
@@ -19,8 +30,12 @@ public class BottomPanelAnimation : CanvasAnimation
     }
     public void Hide()
     {
-        _animatedElement.DOLocalMoveY(_animatedElement.localPosition.y - 200, 1f).SetEase(Ease.InCubic);
+        _animatedElement.DOLocalMove(_hidePos, 0.5f).SetEase(Ease.InSine);
     }
 
-
+    public void Show()
+    {
+        _animatedElement.DOLocalMove(_showPos, 0.5f).SetEase(Ease.InSine);
+    }
 }
+
