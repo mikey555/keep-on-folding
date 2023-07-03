@@ -1,6 +1,8 @@
 # Keep On Folding - simple word scramble game
 
-https://mikitimik.itch.io/keep-on-folding
+![logo](https://github.com/mikey555/keep-on-folding/assets/983004/aa288f41-b435-442f-b154-377d53844ba9)
+
+Play: https://mikitimik.itch.io/keep-on-folding
 
 v1 - made for GMTK Jam 2022. I spent about 4 hours implementing a basic playable version.
 - type and submit to solve
