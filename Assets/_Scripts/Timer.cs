@@ -21,7 +21,7 @@ public class Timer : MonoBehaviour
         get { return _timeLeft; }
         protected set
         {
-            if (value > MAX_TIME_ALLOWED_ON_CLOCK) _timeLeft = 999;
+            if (value > MAX_TIME_ALLOWED_ON_CLOCK) _timeLeft = MAX_TIME_ALLOWED_ON_CLOCK;
             _timeLeft = value;
         }
     }
