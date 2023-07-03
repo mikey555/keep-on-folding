@@ -43,4 +43,10 @@ public class GameTimer : Timer
             _image.DOColor(Color.white, 0.3f);
         }
     }
+
+    protected override void Init()
+    {
+        base.Init();
+        _image.DOColor(Color.white, 0.3f);
+    }
 }

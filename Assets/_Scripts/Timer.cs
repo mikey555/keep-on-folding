@@ -35,7 +35,7 @@ public class Timer : MonoBehaviour
         SetTimeLeftText(_startingTimerDuration);
     }
 
-    protected void Init()
+    protected virtual void Init()
     {
 
         TimeLeft = _startingTimerDuration;
