@@ -229,11 +229,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ReferenceResolution: {x: 960, y: 600}
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -262,52 +262,17 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 200
   m_TargetDisplay: 0
---- !u!1 &206478971 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4084618364758181167, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
-  m_PrefabInstance: {fileID: 4084618363784969614}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &206478977 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3543961027386012531, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
   m_PrefabInstance: {fileID: 4084618363784969614}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206478971}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 089968939069c4d12b5d861a3b0cba36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &206478978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206478971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: e11e784b515394d009ff3af1ce32f701, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 206478977}
-          m_TargetAssemblyTypeName: Timer, Assembly-CSharp
-          m_MethodName: InitAndStart
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &209747569
 GameObject:
   m_ObjectHideFlags: 0
@@ -700,7 +665,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 186852142157473384, guid: e3fd4f640c73649469aa06034b4f5646, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -223.74997
+      value: 0.07939458
       objectReference: {fileID: 0}
     - target: {fileID: 186852142157473384, guid: e3fd4f640c73649469aa06034b4f5646, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1325,11 +1290,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ReferenceResolution: {x: 960, y: 600}
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -1586,7 +1551,7 @@ PlayableDirector:
   - key: {fileID: 4299581152249019110, guid: 0a63878fb823c476a814edb8e739ea2c, type: 2}
     value: {fileID: 0}
   - key: {fileID: -3889741263021766599, guid: 0a63878fb823c476a814edb8e739ea2c, type: 2}
-    value: {fileID: 206478978}
+    value: {fileID: 0}
   - key: {fileID: 8534723523562158526, guid: 0a63878fb823c476a814edb8e739ea2c, type: 2}
     value: {fileID: 0}
   - key: {fileID: 1743669509592664756, guid: 0a63878fb823c476a814edb8e739ea2c, type: 2}
@@ -1602,7 +1567,7 @@ PlayableDirector:
   - key: {fileID: 0}
     value: {fileID: 0}
   - key: {fileID: 0}
-    value: {fileID: 206478978}
+    value: {fileID: 0}
   - key: {fileID: 8534723523562158526, guid: b205d508de4214890aa8fd5ba82e03e1, type: 2}
     value: {fileID: 0}
   - key: {fileID: 2257401224130567986, guid: b205d508de4214890aa8fd5ba82e03e1, type: 2}
@@ -2431,10 +2396,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 149070696}
     m_Modifications:
-    - target: {fileID: 3543961027386012531, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
-      propertyPath: _startingTimerDuration
-      value: 60
-      objectReference: {fileID: 0}
     - target: {fileID: 4084618364403276162, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -2453,7 +2414,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4084618364403276162, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -360
+      value: -361
       objectReference: {fileID: 0}
     - target: {fileID: 4084618364403276163, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
       propertyPath: m_Enabled
@@ -2556,9 +2517,8 @@ PrefabInstance:
       value: GameTimer
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 4084618364758181163, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
-    - {fileID: 4084618364676295645, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
-    - {fileID: 4084618364758181160, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b7229a1c626e40af8676118cf4d24ed, type: 3}
 --- !u!1001 &5154544903075418710
