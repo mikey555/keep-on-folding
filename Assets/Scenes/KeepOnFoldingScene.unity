@@ -577,7 +577,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingTimerDuration: 3
   _unlimitedTime: 0
-  _hideTimeOnTimeUp: 1
+  _timeUpTextBehavior: 2
+  _timeUpText: GO
   _timeLeftText: {fileID: 1622397247}
 --- !u!1001 &509115240
 PrefabInstance:
@@ -1894,7 +1895,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1622397247
 MonoBehaviour:
   m_ObjectHideFlags: 0
