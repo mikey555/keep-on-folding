@@ -47,9 +47,9 @@ public class Timer : MonoBehaviour
     protected virtual void Update()
     {
         if (!_isTimerActive || _unlimitedTime) return;
+        TimeLeft -= Time.deltaTime;
         if (TimeLeft > 0)
         {
-            TimeLeft -= Time.deltaTime;
             this.SetTimeLeftText(TimeLeft);
         }
         else
