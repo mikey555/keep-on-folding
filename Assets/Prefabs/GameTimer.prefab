@@ -57,6 +57,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingTimerDuration: 60
   _unlimitedTime: 0
+  _hideTimeOnTimeUp: 0
   _timeLeftText: {fileID: 0}
 --- !u!222 &4829835183678941090
 CanvasRenderer:
@@ -105,7 +106,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4829835183678941095}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7766ef8b650eb4c91b5dcc640963a33d, type: 3}
+  m_Script: {fileID: 11500000, guid: 821ca8c4c6f90480cbcc2963c8ed4d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnTransform: {fileID: 4829835183678941092}
@@ -124,6 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingTimerDuration: 60
   _unlimitedTime: 0
+  _hideTimeOnTimeUp: 0
   _timeLeftText: {fileID: 4829835185452693541}
 --- !u!1 &4829835184225371286
 GameObject:

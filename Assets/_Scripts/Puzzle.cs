@@ -31,8 +31,9 @@ public class Puzzle : MonoBehaviour
     List<Side> _sidesTyped;
     List<Side> _sides;
     char[] chars;
-    public List<Side> Sides {
-        get{ return _sides; }
+    public List<Side> Sides
+    {
+        get { return _sides; }
     }
 
     public event Action<string> OnAnswerChanged;
@@ -41,7 +42,7 @@ public class Puzzle : MonoBehaviour
     private void Awake()
     {
         _sides = new List<Side>(GetComponentsInChildren<Side>());
-        
+
     }
 
     private void OnEnable()
@@ -63,20 +64,17 @@ public class Puzzle : MonoBehaviour
 
         var chars = _wordPossibilities[0].ToCharArray();
         _sidesTyped = new List<Side>();
-        
 
-        // from UnfoldedDie
+
         this.chars = chars;
         var numbers = new List<int>() { 1, 2, 3, 4, 5, 6 };
         foreach (var side in _sides)
         {
             var randomIndex = numbers[UnityEngine.Random.Range(0, numbers.Count)];
             numbers.Remove(randomIndex);
-            side.Letter = chars[randomIndex-1].ToString().ToUpper();
+            side.Letter = chars[randomIndex - 1].ToString().ToUpper();
         }
-
     }
-
 
     void Update()
     {
@@ -85,7 +83,6 @@ public class Puzzle : MonoBehaviour
 
     public void CheckForLetter(string letter)
     {
-
         foreach (var side in Sides)
         {
             if (side.Letter == letter.ToUpper() && !side.IsTyped)
@@ -97,7 +94,6 @@ public class Puzzle : MonoBehaviour
                 return;
             }
         }
-
     }
 
     public void ClearTypedLetters()
@@ -131,9 +127,8 @@ public class Puzzle : MonoBehaviour
 
     public void Scramble()
     {
-        // unfoldedDie.Scramble()
         var posList = new List<Vector3>();
-        
+
         foreach (var side in Sides)
         {
             posList.Add(side.transform.position);

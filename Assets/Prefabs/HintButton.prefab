@@ -283,4 +283,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hintButton: {fileID: 2120199137119237727}
-  _numHintsLeft: 5
+  _hintButtonText: {fileID: 2120199136044789459}
+  _startingNumHints: 5
