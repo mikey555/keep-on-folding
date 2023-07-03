@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using DG.Tweening;
 
 public class Timer : MonoBehaviour
 {
@@ -13,9 +12,12 @@ public class Timer : MonoBehaviour
     public event Action OnTimeUp;
     protected const int MAX_TIME_ALLOWED_ON_CLOCK = 999;
 
+    public enum TimeUpTextBehavior { ShowZero, ShowString, HideText }
+    [SerializeField] TimeUpTextBehavior _timeUpTextBehavior;
+    [SerializeField] string _timeUpText;
+
     protected float _timeLeft;
 
-    [SerializeField] bool _hideTimeOnTimeUp = false;
     public float TimeLeft
     {
         get { return _timeLeft; }
@@ -33,6 +35,7 @@ public class Timer : MonoBehaviour
     void Start()
     {
         SetTimeLeftText(_startingTimerDuration);
+        ClearText();
     }
 
     protected virtual void Init()
@@ -56,7 +59,7 @@ public class Timer : MonoBehaviour
         {
             OnTimeUp?.Invoke();
             _isTimerActive = false;
-            if (_hideTimeOnTimeUp) HideTime();
+            if (_timeUpTextBehavior == TimeUpTextBehavior.HideText) ClearText();
         }
     }
 
@@ -73,7 +76,6 @@ public class Timer : MonoBehaviour
     public void StartTimer()
     {
         _isTimerActive = true;
-        ShowTime();
     }
 
     public void InitAndStart()
@@ -82,11 +84,12 @@ public class Timer : MonoBehaviour
         StartTimer();
     }
 
-    public void ShowTime() { _timeLeftText.gameObject.SetActive(true); }
-    public void HideTime() { _timeLeftText.gameObject.SetActive(false); }
+    public void ClearText() { _timeLeftText.text = ""; }
 
     public void SetTimeLeftText(float timeLeft)
     {
-        _timeLeftText.text = Mathf.Ceil(timeLeft).ToString();
+        var str = Mathf.Ceil(timeLeft).ToString();
+        // if (_hideTimeOnTimeUp && timeLeft <= 0) return; // takes an extra frame for gameobject to inactivate
+        _timeLeftText.text = str;
     }
 }
