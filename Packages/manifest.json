@@ -42,7 +42,8 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
-    "com.ecasillas.missingrefsfinder": "https://github.com/edcasillas/unity-missing-references-finder.git"
+    "com.ecasillas.missingrefsfinder": "https://github.com/edcasillas/unity-missing-references-finder.git",
+    "com.dbrizov.naughtyattributes": "https://github.com/dbrizov/NaughtyAttributes.git#upm"
 
   }
 }
