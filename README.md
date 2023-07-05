@@ -32,7 +32,7 @@ I wanted to get to know Unity's Input System which allows for easy mapping of ke
 Although my new event system was doing a good job of modularizing the project, it become burdensome when it came to adding animation between game states, and I found myself creating new events for the sole purpose of invoking another event. My first approach was to use a Director and Playable Timeline. This was quite cumbersome for simple transitions. I ended up writing a TransitionDirector component that would coordinate tweening (with DOTween) and game logic of switching between game states. 
 
 ## Anagrams
-First I found a list of around 400 common 6-letter words. [getAnagrams.py](https://github.com/mikey555/keep-on-folding/blob/main/python/getAnagrams.py) checks each word for possible anagrams by calling the [anagramica API](http://www.anagramica.com/api) and outputs a complete word list in json.
+First I found a list of around 400 common 6-letter words. Then I feed the list to [getAnagrams.py](https://github.com/mikey555/keep-on-folding/blob/main/python/getAnagrams.py) which checks each word for possible anagrams by calling the [anagramica API](http://www.anagramica.com/api) and outputs a complete word list in json.
 
 ## Scene Hierarchy
 <img style="align: left" src="https://github.com/mikey555/keep-on-folding/assets/983004/c635cff5-b861-45e9-9ac7-1f25fe5878b5">
