@@ -26,4 +26,5 @@ for word in words:
     time.sleep(1)
 
 with open('sample.json', 'w') as json_file:
-    json.dump(all, json_file)
+    dict = {"wordArrays": all}
+    json.dump(dict, json_file)
