@@ -63,12 +63,12 @@ public class Timer : MonoBehaviour
         }
     }
 
-    public void SubtractTime(FinishTurnEventArgs args)
+    public void SubtractTime()
     {
         TimeLeft -= Constants.SKIP_TIME_PENALTY;
     }
 
-    public void AddTime(FinishTurnEventArgs args)
+    public void AddTime()
     {
         TimeLeft += Constants.CORRECT_ANSWER_TIME_BONUS;
     }

@@ -8,10 +8,14 @@ using UnityEngine.Events;
 public class PlayerActions : MonoBehaviour, IGetNewPuzzle
 {
     PlayerInputActions _playerInputActions;
-    public static event Action<FinishTurnEventArgs> OnSubmit;
-    public static event Action<FinishTurnEventArgs> OnSkip;
+    public static event Action OnSubmit;
+    public static event Action OnSkip;
 
     Puzzle _currentPuzzle;
+    public Puzzle CurrentPuzzle
+    {
+        get { return _currentPuzzle; }
+    }
 
     void Awake()
     {
@@ -81,7 +85,7 @@ public class PlayerActions : MonoBehaviour, IGetNewPuzzle
     {
         var args = new FinishTurnEventArgs();
         args.Puzzle = _currentPuzzle;
-        OnSkip?.Invoke(args);
+        OnSkip?.Invoke();
     }
 
     public void Scramble(InputAction.CallbackContext ctx)
@@ -96,7 +100,7 @@ public class PlayerActions : MonoBehaviour, IGetNewPuzzle
         {
             var args = new FinishTurnEventArgs();
             args.Puzzle = _currentPuzzle;
-            OnSubmit?.Invoke(args);
+            OnSubmit?.Invoke();
 
 
         }

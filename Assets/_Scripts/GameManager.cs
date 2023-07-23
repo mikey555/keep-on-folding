@@ -100,15 +100,18 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    public void PuzzleTransitionStart(PlayerActionEventArgs args)
+    public void PuzzleTransitionStart()
     {
         OnPuzzleTransitionStart?.Invoke();
     }
 
-    public void PuzzleTransitionEnd(PlayerActionEventArgs args)
+    public void PuzzleTransitionEnd()
     {
         OnPuzzleTransitionEnd?.Invoke();
     }
 
-
+    public class OnGameOverArgs : EventArgs
+    {
+        public Puzzle Puzzle;
+    }
 }

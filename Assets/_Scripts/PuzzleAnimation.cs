@@ -36,16 +36,16 @@ public class PuzzleAnimation : MonoBehaviour
     public void PuzzleTransitionEnd()
     {
 
-        GameManager.Instance.PuzzleTransitionEnd(new PlayerActionEventArgs());
+        GameManager.Instance.PuzzleTransitionEnd();
 
     }
 
-    public void PlaySuccessAnimation(FinishTurnEventArgs args)
+    public void PlaySuccessAnimation()
     {
         _animator.SetBool("Pass", true);
     }
 
-    public void PlaySkipAnimation(FinishTurnEventArgs args)
+    public void PlaySkipAnimation()
     {
         _animator.SetTrigger("Skip");
     }

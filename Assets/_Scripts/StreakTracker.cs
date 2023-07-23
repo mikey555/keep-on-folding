@@ -74,12 +74,12 @@ public class StreakTracker : MonoBehaviour
 
     }
 
-    public void IncreaseStreak(FinishTurnEventArgs args)
+    public void IncreaseStreak()
     {
         StreakLength++;
     }
 
-    public void RestartStreak(FinishTurnEventArgs args)
+    public void RestartStreak()
     {
         StreakLength = 0;
     }

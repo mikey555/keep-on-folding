@@ -23,14 +23,17 @@ public class AnswerTextDisplay : MonoBehaviour
     private void OnEnable()
     {
         PuzzleSpawner.OnNewPuzzleSpawned += PuzzleSpawner_OnNewPuzzleSpawned;
-        PlayerActions.OnSubmit += RevealCorrectAnswer;
-        PlayerActions.OnSkip += RevealSkippedAnswer;
+        PlayerActions.OnSubmit += RevealAnswerOnCorrect;
+        PlayerActions.OnSkip += RevealAnswerOnSkip;
+        GameManager.OnGameOver += RevealAnswerOnSkip;
     }
 
     private void OnDisable()
     {
-        PlayerActions.OnSubmit -= RevealCorrectAnswer;
-        PlayerActions.OnSkip -= RevealSkippedAnswer;
+        PuzzleSpawner.OnNewPuzzleSpawned -= PuzzleSpawner_OnNewPuzzleSpawned;
+        PlayerActions.OnSubmit -= RevealAnswerOnCorrect;
+        PlayerActions.OnSkip -= RevealAnswerOnSkip;
+        GameManager.OnGameOver -= RevealAnswerOnSkip;
     }
 
     void Start()
@@ -64,14 +67,14 @@ public class AnswerTextDisplay : MonoBehaviour
             });
     }
 
-    public void RevealCorrectAnswer(FinishTurnEventArgs args)
+    public void RevealAnswerOnCorrect()
     {
-        RevealAnswer(args.Puzzle.TypedLetters, true);
+        RevealAnswer(_currentPuzzle.TypedLetters, true);
     }
 
-    public void RevealSkippedAnswer(FinishTurnEventArgs args)
+    public void RevealAnswerOnSkip()
     {
-        RevealAnswer(args.Puzzle.WordPossibilities[0], false);
+        RevealAnswer(_currentPuzzle.WordPossibilities[0], false);
     }
 
 

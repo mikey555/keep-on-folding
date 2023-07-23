@@ -68,12 +68,12 @@ public class TimeChangeNotifier : MonoBehaviour
             });
     }
 
-    public void ShowBonusTimeModification(FinishTurnEventArgs args)
+    public void ShowBonusTimeModification()
     {
         ShowTimeModification(Constants.CORRECT_ANSWER_TIME_BONUS, false);
     }
 
-    public void ShowPenaltyTimeModification(FinishTurnEventArgs args)
+    public void ShowPenaltyTimeModification()
     {
         ShowTimeModification(Constants.SKIP_TIME_PENALTY, true);
     }

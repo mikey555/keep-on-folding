@@ -41,12 +41,12 @@ public class AudioSystem : Singleton<AudioSystem>
         _sfxSource.PlayOneShot(clip, volumeScale);
     }
 
-    public void PlayBuzzerSound(FinishTurnEventArgs args)
+    public void PlayBuzzerSound()
     {
         PlaySound(buzzerClip, 1f);
     }
 
-    public void PlayBellSound(FinishTurnEventArgs args)
+    public void PlayBellSound()
     {
         PlaySound(bellClip, 1f);
     }
