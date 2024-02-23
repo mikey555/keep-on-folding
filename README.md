@@ -2,7 +2,10 @@
 
 ![logo](https://github.com/mikey555/keep-on-folding/assets/983004/aa288f41-b435-442f-b154-377d53844ba9)
 
-Play: https://mikitimik.itch.io/keep-on-folding
+Play: https://mikitimik.itch.io/keep-on-folding<br/>
+Artwork, animation - <a href="https://jsantos.work/">8bitsantos</a><br/>
+Programming, music - mikitimik (me)<br/>
+
 
 v1 - made for GMTK Jam 2022. I spent about 4 hours implementing a basic playable version.
 - type and submit to solve
@@ -10,12 +13,12 @@ v1 - made for GMTK Jam 2022. I spent about 4 hours implementing a basic playable
 - endless
 
 v2 - developed into a timed game with end state. I also significantly improved the readability and modularity of the code.
-- timer with correct answer bonus and skip penalty
-- anagrams accepted (e.g., resist, sister)
+- implemented a timer with correct answer time bonus and skip penalty
+- anagrams now accepted (e.g., resist, sister)
 - streak counter
 - hint button
 - start screen, game over screen, animated transitions, replay game
-- architecture redo - refactor singletons to an event framework
+- architecture redo - refactor singletons to an event-based architecture
 - added a few SFX
 
 ## Architecture
